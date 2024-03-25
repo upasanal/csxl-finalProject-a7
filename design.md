@@ -5,14 +5,14 @@ Team A7 Members: [Upasana Lamsal](https://github.com/upasanal), [Jake Rogers](ht
 The current seat reservation within the CSXL allows students to choose between three general sections: standing desks, sitting desks, or communal area seats. With the creation of an interactive seating chart and map widget, this feature enables students to reserve certain seats within the XL Coworking Space and Pair Programming Labs. By enabling students to reserve specific seats, the mapping of students to seats enforces that students only sit in spaces reserved specifically for them. Furthermore, CSXL ambassadors and administrators can better track space usage, ensuring students stay within their reserved times and make improvements upon the space if needed.
 ## Key Personas:
 1. Ajay Ambassador has the ability to organize and keep track of students coming into the CSXL based on their designated seats reserved through the interactive seating widget, ensuring students do not overstay their reservations, along with all the abilities of Saishreeya Student. 
-2. Rumplestiltskin Root can manage the seats available across the CSXL and Pair Programming labs available to students and faculty by adding, removing, or editing seats as needed on the interactive seating widget, along with all the abilities of both Saishreeya Student and Ajay Ambassador. 
+2. Rumplestiltskin Root can manage the seats available across the CSXL and Pair Programming labs available to students and faculty by editing seats as needed on the interactive seating widget, along with all the abilities of both Saishreeya Student and Ajay Ambassador. 
 3. Saishreeya Student can reserve a specific seat in the CSXL or Pair Programming Labs for both themselves and up to a certain number of group-mates through the interactive seating widget by seeing which seats are available or reserved. Students must be signed in to their authenticated UNC account beforehand.
 ## User Stories: 
 * As Saishreeya Student, I want to see which seats in the CSXL and Pair Programming Labs are available so that I know which seats I am able to reserve for myself or, if needed, groupmates.
 * As Saishreeya Student, I want to see a list of the current seats I have reserved and the time at which the reservation for these seats ends so that I’m aware of when I should leave those seats.
-* As Rumplestiltskin Root, I want to see an interactive seating chart of the CSXL and Pair Programming Labs, as well as have the ability to create, edit, and delete seats in order to manage and update the seats, if needed.
+* As Rumplestiltskin Root, I want to see an interactive seating chart of the CSXL and Pair Programming Labs, as well as have the ability to edit seats in order to manage and update the seat's category and coordinates, if needed.
 * As Ajay Ambassador, I want to see the countdown of time an individual has left in their reserved seat so I can notify them if they have extended their stay beyond their time slot. 
-* As Ajay Ambassador, I want to see the name of each person at every seat to make sure everyone is accounted for and verify that reserved seats are occupied by the correct person. 
+* As Ajay Ambassador, I want to see the name of each person for every seat reservation to make sure everyone is accounted for and verify that reserved seats are occupied by the correct person. 
 ## Wireframes / Mockups: 
 ## Technical Implementation Opportunities and Planning:
 ### Existing Codebase: 
@@ -38,21 +38,25 @@ The current seat reservation within the CSXL allows students to choose between t
 * User Admin Seating Creation Component: Interface for adding new seats to the seating library.
 * Seating Card Widget: Cards for seats in the CSXL. Displays availability status, ID number, seat type, reservation time frame, and a button to reserve.
 ### Models: 
-* Reservation Model: Model stores the necessary reservation information, including the seat reserved, the PID of the user, the first and last name of the user, the start time, and the total time the reservation is reserved for 
-* Seat Model: A model that stores all the information about a given seat in the system. There will be identifiable unique IDs per seating, the location group associated (like what table), and the specific reservation instance that is connected with the given seat if the seat has been reserved
-* Full Seating Model: This will store all the information required for all the tables and specific seating spots we have in general, reserved or not reserved, encapsulating the seat model we also have. 
-* Available seating Model: This will be a submodel of the full seating model that only has the non-reserved seat models available.
-* Room Model 
+* Reservation Model: Model stores the necessary reservation information, including the seat reserved ID, the PID of the user, the total time the reservation is reserved for, the start and end times, and a unique reservation ID.
+* Seat Model: A model that stores all the information about a given seat in the system. There will be identifiable unique IDs per seating, the seat category (standing/sitting), the room it is in (unique room ID), the X and Y coordinates of the seat, if a seat is reserved/occupied, and the specific reservation instance that is connected with the given seat if the seat has been reserved (an optional reservation ID)
+* Room Model: This will store a room ID, room name, the floorplan SVG, and the seats associated with the room. Creating the model will make it so in the future, new room floorplans can be added more easily.
+* User Model: This will have the user's PID (unique identifier), their first name, and their last name. 
 ### API and Routes:
 * Get Seats (/seating): Returns all the current seats we have available at the CSXL to eventually display them in the interactive seating chart. Used by every persona.
-* Get Occupied Sear (/seating): Returns all the sets that have been reserved in the inventory so we know what seats are closed off from bookings and the seats that are still open for booking. Used by all personas.
-* Get A User’s Seat Reservation  (/seating/reservations/{user_pid}): Returns the time left of a person’s reservation, the start and stop times, and their first and last name. Used by all the personas.
-* Post Seat Reservation (/seating/reservation): This will receive all information pertaining to a new seat reservation in order to update which seat is taken or not. Used by Ajay Ambassador and Rumpelstiltskin Root. 
-* Delete Seat Reservation (/seating/reservation): Deletes a seat reservation to update the database with the most current and correct seat reservation status. Utilized by Ajay Ambassador and Rumpelstiltskin Root. 
-* Get reservations(/seating/reservations): Returns all of the current reservations so the Ambassador has a list of names of reservation users, time left, and seat location. Used by Ajay Ambassador and Rumpelstiltskin Root. 
-* Post New Seat(/seating/post): Allows the root user to add a new seat in the CSXL, including its table type and location and all other necessary information for the new seat. Used by Rumpelstiltskin Root. 
-* Delete a Seat  (/seating/delete): Allows the root user to delete an existing seat in the CSXL that has been removed. The purpose is to update the seats people can reserve in the CSXL to reflect what is actually existing. Used by Rumpelstiltskin Root.
+* Get All Rooms (/seating/room): Get all the rooms that are in the overall CSXL environment. Used by every persona.
+* Get Specific Room Details/Floorplan (/seating/room/{room_id}): Return the specific Room's floorplan, name, and associated seats. Used by every persona.
+* Get all seats given a room (seating/room/{room_id}/seats): Returns all of the unique seats in a certain room. Used by every persona.
+* Get specific seat details (/seating/seat/{seat_id}): Allows the user to see the information of a current existing seat given its preassigned seat ID, including the seat category, the room it is in, the X and Y coordinates of the seat, and if a seat is reserved/occupied. Used by all personas. 
+* Put Seat (/seating/seat/{seat_id}): Allows the root user to edit a pre-existing seat in the CSXL, including its seat category, X Coordinate, and Y coordinate. Used by Rumpelstiltskin Root.
+* Get all reservations (/seating/reservation): Returns all current reservations that have been made by any user. Used by Rumpelstiltskin Root and Ajay Ambassador.
+* Get A User’s Seat Reservations (/seating/reservations/{user_pid}): Returns the time left of a person’s reservation(s), the start and stop times, and their first and last name. Used by all the personas.
+* Post Seat Reservation (/seating/reservations): This will receive all information pertaining to a new seat reservation in order to update which seat is taken or not. Used by all personas.
+* Delete Seat Reservation (/seating/reservation/{reservation_id}): Deletes a seat reservation to update the database with the most current and correct seat reservation status. Used by all personas.
+* Put Seat Reservation (/seating/reservation/{reservation_id}): Updates a current seat reservation to update the database with the most current and correct seat reservation status. Used by all personas.
+* Get reservations (/seating/reservations): Returns all of the current reservations so the Ambassador has a list of names of reservation users, time left, and seat location. Used by Ajay Ambassador and Rumpelstiltskin Root.
+  
 ### Security and Privacy of Data:
 * Only XL Ambassadors and Root can edit/create check-ins and check-outs.
-* Root is the only persona that can add/delete seat entries
+* Root is the only persona that can update seat entries
 * Saishreeya Student should not be able to cancel Sam Student's reservation
