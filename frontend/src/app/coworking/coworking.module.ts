@@ -31,6 +31,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AmbassadorXlListComponent } from './ambassador-home/ambassador-xl/list/ambassador-xl-list.component';
 import { AmbassadorRoomListComponent } from './ambassador-home/ambassador-room/list/ambassador-room-list.component';
+import { CsxlSeatMapComponent } from './seating-reservation/csxl-seat-map/csxl-seat-map.component';
+import { SeatMapWidgetComponent } from './widgets/seat-map/seat-map.widget';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { AmbassadorRoomListComponent } from './ambassador-home/ambassador-room/l
     ConfirmReservationComponent,
     NewReservationPageComponent,
     DateSelector,
-    OperatingHoursDialog
+    OperatingHoursDialog,
+    CsxlSeatMapComponent, 
+    SeatMapWidgetComponent
   ],
   imports: [
     CommonModule,

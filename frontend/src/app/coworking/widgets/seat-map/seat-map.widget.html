@@ -1,0 +1,88 @@
+<mat-card>
+        <svg viewBox="0 0 150 170">
+            
+    <rect x="0" y="0" width="8" height="40" fill="gray"></rect>
+            
+    <rect x="40" y="0" width="8" height="60" fill="gray"></rect>
+            
+    <rect x="48" y="0" width="8" height="60" fill="gray"></rect>
+            
+    <rect x="85" y="0" width="8" height="60" fill="gray"></rect>
+            
+    <rect x="93" y="0" width="8" height="60" fill="gray"></rect>
+            
+    <rect x="142" y="0" width="8" height="80" fill="gray"></rect>
+            
+    <rect x="142" y="0" width="8" height="80" fill="gray"></rect>
+            
+    <rect x="100" y="90" width="25" height="60" fill="gray"></rect>
+            
+    <circle cx="25" cy="80" r="10" fill="gray"></circle>
+            
+    <circle cx="60" cy="105" r="10" fill="gray"></circle>
+            
+    <circle cx="25" cy="130" r="10" fill="gray"></circle>
+            
+    <rect x="0" y="162" width="60" height="8" fill="gray"></rect>
+            
+    <ng-container *ngFor="let seat of seats">
+                
+      <a (click)="seatClicked(seat)">
+                    
+        <circle
+          [attr.cx]="seat.x"
+          [attr.cy]="seat.y"
+          r="4"
+          [style.fill]="getSeatColor(seat)" />
+                    
+        <text [attr.x]="seat.x" [attr.y]="seat.y" class="circle">
+          {{ seat.id }}
+        </text>
+                
+      </a>
+            
+    </ng-container>
+          
+  </svg>
+</mat-card>
+<button
+  mat-stroked-button
+  class="button"
+  [class.active]="isButtonActive()"
+  (click)="reserveSeats()">
+  Reserve Seats
+</button>
+<button mat-stroked-button class="button" (click)="clearReserves()">
+  Clear Reservations
+</button>
+
+<!-- This HTML code was taken from new-reservation-page.component.html with an addition of Unavailable Seats -->
+<mat-card>
+  <div class="legend-container">
+        
+    <div class="legend-item">
+            
+      <div class="legend-color" style="background-color: #03691e"></div>
+            <span class="legend-text">Seating Monitors</span>     
+    </div>
+        
+    <div class="legend-item">
+            
+      <div class="legend-color" style="background-color: orange"></div>
+            <span class="legend-text">Standing Monitors</span>     
+    </div>
+        
+    <div class="legend-item">
+            
+      <div class="legend-color" style="background-color: #3479be"></div>
+            <span class="legend-text">Communal Area Seats</span>     
+    </div>
+        
+    <div class="legend-item">
+              
+      <div class="legend-color" style="background-color: #8e8e8e"></div>
+              <span class="legend-text">Unavailable Seats</span>       
+    </div>
+      
+  </div>
+</mat-card>

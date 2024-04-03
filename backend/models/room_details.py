@@ -3,10 +3,11 @@
 Importantly, it includes a room's seats, if seats are reservable as in the XL collab.
 """
 
+from backend.models.coworking.floorplan.floorplan import Floorplan
 from .room import Room
 from .coworking.seat import Seat
 
-__authors__ = ["Kris Jordan"]
+__authors__ = ["Upasana Lamsal"]
 __copyright__ = "Copyright 2023"
 __license__ = "MIT"
 
@@ -17,6 +18,7 @@ class RoomDetails(Room):
     capacity: int
     reservable: bool
     seats: list[Seat] = []
+    floorplan: Floorplan | None
 
     def to_room(self) -> Room:
         """Converts the details model to a room model.

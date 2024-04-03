@@ -7,6 +7,7 @@ from ...models.coworking import SeatDetails
 from ...models.coworking.seat import SeatIdentity, Seat
 from typing import Self
 
+
 __authors__ = ["Kris Jordan"]
 __copyright__ = "Copyright 2023"
 __license__ = "MIT"
@@ -45,7 +46,7 @@ class SeatEntity(EntityBase):
             sit_stand=self.sit_stand,
             x=self.x,
             y=self.y,
-            room=self.room.to_model(),
+            room=self.room.to_model() 
         )
 
     @classmethod
@@ -56,8 +57,8 @@ class SeatEntity(EntityBase):
         entities = (
             session.query(cls)
             .filter(cls.id.in_(seat_ids))
-            .options(joinedload(SeatEntity.room))
-            .all()
+            .options(joinedload(SeatEntity.room)) 
+            .all() 
         )
         return [entity.to_model() for entity in entities]
 

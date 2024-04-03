@@ -2,9 +2,14 @@
 The Room Service allows the API to manipulate rooms data in the database.
 """
 
+from typing import Optional
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from backend.entities.floorplan.floorplan_entity import FloorplanEntity
+
+from backend.models.coworking.floorplan.floorplan import Floorplan
+
 
 from ..database import db_session
 from ..models import Room
@@ -64,6 +69,17 @@ class RoomService:
 
         # Return the model
         return entity.to_details_model()
+    
+    """Based on a given room by id, it obtains the floorplan of the room."""
+
+    def get_floorplan_by_id(self, id: int) -> Optional[Floorplan]:
+        """ Get the floorplan with the given id of the room."""
+        room_entity = self._session.query(RoomEntity).filter(RoomEntity.id == id).first()
+        if room_entity:
+            return room_entity.floorplan
+        else:
+            return None
+
 
     def create(self, subject: User, room: RoomDetails) -> RoomDetails:
         """Creates a new room.
@@ -144,3 +160,4 @@ class RoomService:
         # Delete and commit changes
         self._session.delete(room_entity)
         self._session.commit()
+    

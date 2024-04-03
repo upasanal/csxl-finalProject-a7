@@ -7,7 +7,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { Seat, SeatAvailability } from 'src/app/coworking/coworking.models';
-
+import { CsxlSeatMapService } from '../../seating-reservation/csxl-seat-map/csxl-seat-map.service';
+import { CoworkingPageComponent } from '../../coworking-home/coworking-home.component';
+import { CoworkingService } from '../../coworking.service';
 class SeatCategory {
   public title: string;
 
@@ -85,8 +87,19 @@ export class CoworkingDropInCard implements OnChanges {
 
   public categories: SeatCategory[];
 
-  constructor() {
+  constructor(
+    private mapService: CsxlSeatMapService,
+    private coworkSerivce: CoworkingService
+  ) {
     this.categories = this.initCategories();
+  }
+
+  navigateToSeatMap() {
+    this.mapService.navigateToSeatMap();
+  }
+
+  getOpenHours() {
+    return this.coworkSerivce.getOperatingHours();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -104,7 +117,8 @@ export class CoworkingDropInCard implements OnChanges {
       }
     }
   }
-
+  // When a user selects a seat category from the drop-down list, this method is triggered. 
+  // It emits an event with an array of SeatAvailability objects corresponding to the selected seats. 
   reserve(category: SeatCategory): void {
     this.seatsSelected.emit([
       ...category.seats_available_now,

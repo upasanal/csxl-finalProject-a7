@@ -33,6 +33,12 @@ export interface Seat {
   y: number;
 }
 
+export interface Table {
+  id: number;
+  x: number;
+  y: number;
+}
+
 export interface Room {
   id: string | null;
   nickname: string;

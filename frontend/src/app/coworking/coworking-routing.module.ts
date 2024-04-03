@@ -4,12 +4,14 @@ import { CoworkingPageComponent } from './coworking-home/coworking-home.componen
 import { ReservationComponent } from './reservation/reservation.component';
 import { NewReservationPageComponent } from './room-reservation/new-reservation-page/new-reservation-page.component';
 import { ConfirmReservationComponent } from './room-reservation/confirm-reservation/confirm-reservation.component';
+import { CsxlSeatMapComponent } from './seating-reservation/csxl-seat-map/csxl-seat-map.component';
 
 const routes: Routes = [
   CoworkingPageComponent.Route,
   ReservationComponent.Route,
   NewReservationPageComponent.Route,
   ConfirmReservationComponent.Route,
+  CsxlSeatMapComponent.Route,
   {
     path: 'ambassador',
     title: 'Ambassador',

@@ -25,6 +25,11 @@
   color: white;
 }
 
+.large-padding-button {
+  font-size: 20px;
+  background-color: #612d23;
+}
+
 .mdc-list-item--with-leading-icon .mdc-list-item__start.unavailable {
   background: #612d23;
 }

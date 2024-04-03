@@ -1,12 +1,11 @@
-"""Room API
-
-Room routes are used to create, retrieve, and update Rooms."""
-
 from typing import Optional
 from fastapi import APIRouter, Depends
+from backend.models.coworking.floorplan.circle_table import CircleTable
 from backend.models.coworking.floorplan.floorplan import Floorplan
+from backend.models.coworking.floorplan.rectangle_table import RectangleTable
 
 from backend.models.coworking.seat import Seat
+from backend.services.floorplan import FloorplanService
 
 from ..services import RoomService
 from ..models import Room
@@ -15,14 +14,13 @@ from ..api.authentication import registered_user
 from ..models.user import User
 
 
-__authors__ = ["Ajay Gandecha"]
+__authors__ = ["Ellie Kim, Shreeya Kantamsetty"]
 __copyright__ = "Copyright 2023"
 __license__ = "MIT"
 
-api = APIRouter(prefix="/api/room")
+api = APIRouter(prefix="/api/floorplan")
 openapi_tags = {
-    "name": "Rooms",
-    "description": "Create, update, delete, and retrieve rooms.",
+    "name": "Floorplan",
 }
 
 """
@@ -32,12 +30,24 @@ openapi_tags = {
     5. put the seat coordinates for a seat given a seat biTCH (seat.py)
 """
 
-@api.get("/{id}/floorplan", response_model=Floorplan, tags = ['Rooms'])
-def get_floorplan(id: int,
-    room_service: RoomService = Depends(),
-) -> Optional[Floorplan]:
-    return room_service.get_floorplan_by_id(id)
-    
+
+@api.get("/{id}/r", response_model = list[Seat], tags = ["Floorplan"])
+def get_seats_by_floorplan(id: int, floorplan_service: FloorplanService = Depends(), ) -> list[Seat]:
+    return floorplan_service.get_seats_by_id(id)
+
+@api.get("/{id}/boundary", response_model = str, tags = ["Floorplan"])
+def get_boundary_by_floorplan(id: int, floorplan_service: FloorplanService = Depends(), ) -> str:
+    return floorplan_service.get_boundary_by_id(id)
+
+@api.get("/{id}/circle_tables", response_model = list[CircleTable], tags = ["Floorplan"])
+def get_circletables_by_floorplan(id: int, floorplan_service: FloorplanService = Depends(), ) ->list[CircleTable]:
+    return floorplan_service.get_circletables_by_id(id)
+
+
+@api.get("/{id}/circle_tables", response_model = list[RectangleTable], tags = ["Floorplan"])
+def get_rectangletables_by_floorplan(id: int, floorplan_service: FloorplanService = Depends(), ) -> list[RectangleTable]:
+    return floorplan_service.get_rectangletables_by_id(id)
+
 
 
 @api.get("", response_model=list[RoomDetails], tags=["Rooms"])

@@ -5,6 +5,7 @@ import { GateComponent } from './gate/gate.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileEditorComponent } from './profile/profile-editor/profile-editor.component';
 import { AboutComponent } from './about/about.component';
+import { CsxlSeatMapComponent } from './coworking/seating-reservation/csxl-seat-map/csxl-seat-map.component';
 
 const routes: Routes = [
   HomeComponent.Route,
@@ -17,6 +18,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./coworking/coworking.module').then((m) => m.CoworkingModule)
   },
+  { path: 'coworking/seat-map', component: CsxlSeatMapComponent },
   {
     path: 'academics',
     title: 'Academics',

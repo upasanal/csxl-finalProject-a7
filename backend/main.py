@@ -6,7 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.gzip import GZipMiddleware
 
-from backend.services.coworking.reservation import ReservationException
+# from backend.services.coworking.reservation import ReservationException
 
 from .api.events import events
 

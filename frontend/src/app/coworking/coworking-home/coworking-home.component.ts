@@ -88,7 +88,10 @@ export class CoworkingPageComponent implements OnInit, OnDestroy {
       this.roomReservationService.pollUpcomingRoomReservation(this.snackBar);
     });
   }
-
+  // This method is responsible for handling the reservation process within the coworking home component. 
+  // It is invoked when a user confirmed their seat selection and initiates the reservation process. 
+  // This method communicates with the Coworking Service to draft a reservation based on the selected seats. 
+  // Upon successful, reservation creation, it navigates the user to the reservation page.
   reserve(seatSelection: SeatAvailability[]) {
     this.coworkingService.draftReservation(seatSelection).subscribe({
       error: (error) =>

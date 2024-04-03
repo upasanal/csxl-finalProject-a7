@@ -15,7 +15,7 @@ from ...models.coworking import (
     ReservationRequest,
     ReservationPartial,
     ReservationState,
-    ReservationMapDetails
+    ReservationMapDetails,
 )
 
 __authors__ = ["Kris Jordan, Yuvraj Jain"]
@@ -37,6 +37,7 @@ def draft_reservation(
     reservation_svc: ReservationService = Depends(),
 ) -> Reservation:
     """Draft a reservation request."""
+    print("hello")
     return reservation_svc.draft_reservation(subject, reservation_request)
 
 

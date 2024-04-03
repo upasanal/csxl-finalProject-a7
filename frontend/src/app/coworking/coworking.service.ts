@@ -10,6 +10,7 @@ import { Observable, Subscription, map, BehaviorSubject } from 'rxjs';
 import {
   CoworkingStatus,
   CoworkingStatusJSON,
+  OperatingHours,
   ReservationJSON,
   SeatAvailability,
   parseCoworkingStatusJSON,
@@ -27,7 +28,7 @@ const ONE_HOUR = 60 * 60 * 1000;
 export class CoworkingService implements OnDestroy {
   private status: RxCoworkingStatus = new RxCoworkingStatus();
   public status$: Observable<CoworkingStatus> = this.status.value$;
-
+  public openOperatingHours$: Observable<OperatingHours | undefined>;
   private profile: Profile | undefined;
   private profileSubscription!: Subscription;
 
@@ -40,6 +41,7 @@ export class CoworkingService implements OnDestroy {
     this.profileSubscription = this.profileSvc.profile$.subscribe(
       (profile) => (this.profile = profile)
     );
+    this.openOperatingHours$ = this.initNextOperatingHours();
   }
 
   ngOnDestroy(): void {
@@ -66,12 +68,27 @@ export class CoworkingService implements OnDestroy {
         return { id: seatAvailability.id };
       }),
       start,
-      end
+      end,
     };
+    console.log(this.profile);
+
 
     return this.http
       .post<ReservationJSON>('/api/coworking/reservation', reservation)
       .pipe(map(parseReservationJSON));
+  }
+
+  private initNextOperatingHours(): Observable<OperatingHours | undefined> {
+    return this.status$.pipe(
+      map((status) => {
+        let now = new Date();
+        return status.operating_hours.find((hours) => hours.start <= now);
+      })
+    );
+  }
+
+  getOperatingHours() {
+    return this.openOperatingHours$;
   }
 
   /**
