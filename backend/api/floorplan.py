@@ -64,7 +64,9 @@ def get_circletables_by_floorplan(
     return floorplan_service.get_circletables_by_id(id)
 
 
-@api.get("/{id}/circle_tables", response_model=list[RectangleTable], tags=["Floorplan"])
+@api.get(
+    "/{id}/rectangle_tables", response_model=list[RectangleTable], tags=["Floorplan"]
+)
 def get_rectangletables_by_floorplan(
     id: int,
     floorplan_service: FloorplanService = Depends(),
