@@ -30,6 +30,7 @@ import { UserLookup } from './user-lookup/user-lookup.widget';
 import { CommunityAgreement } from './community-agreement/community-agreement.widget';
 
 import { UserChipList } from './user-chip-list/user-chip-list.widget';
+import { ProfileAboutCard } from './profile-about-card/profile-about-card.widget';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { UserChipList } from './user-chip-list/user-chip-list.widget';
     EventList,
     UserLookup,
     UserChipList,
-    CommunityAgreement
+    CommunityAgreement,
+    ProfileAboutCard
   ],
   imports: [
     CommonModule,
@@ -68,7 +70,8 @@ import { UserChipList } from './user-chip-list/user-chip-list.widget';
     EventCard,
     EventList,
     UserLookup,
-    UserChipList
+    UserChipList,
+    ProfileAboutCard
   ]
 })
 export class SharedModule {}

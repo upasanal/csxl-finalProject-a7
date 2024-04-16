@@ -1,8 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Seat, SeatAvailability } from 'src/app/coworking/coworking.models';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  CircleTable,
+  RectangleTable,
+  Seat,
+  SeatAvailability
+} from 'src/app/coworking/coworking.models';
 import { CsxlSeatMapService } from '../../seating-reservation/csxl-seat-map/csxl-seat-map.service';
 import { CoworkingService } from '../../coworking.service';
 import { ReservationService } from '../../reservation/reservation.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'seat-map',
@@ -12,25 +18,73 @@ import { ReservationService } from '../../reservation/reservation.service';
 export class SeatMapWidgetComponent implements OnInit {
   seats: Seat[] = [];
   seatsClicked: Seat[] = [];
-  seatsReserved: Seat[] = []; // seats only become reserved once user presses reserved button
+  seatsReserved: SeatAvailability[] = []; // seats only become reserved once user presses reserved button
+  @Output() reservationDrafted = new EventEmitter<SeatAvailability[]>();
+  boundaries: String = '';
+  rectangleTables: RectangleTable[] = [];
+  circleTables: CircleTable[] = [];
+
+  roomId = 'SN156';
 
   constructor(
-    private mapService: CsxlSeatMapService,
+    public mapService: CsxlSeatMapService,
     private coworkService: CoworkingService,
-    private reserveService: ReservationService
+    private reserveService: ReservationService,
+    private snackBar: MatSnackBar
   ) {}
   // seats only become reserved once user presses reserved button
 
   ngOnInit(): void {
-    this.seats = this.mapService.getSeats();
+    this.getSeats();
+    this.getBoundaries(this.roomId);
+    this.getCircleTables(this.roomId);
+    this.getRectangleTables(this.roomId);
+    this.getBoundaries(this.roomId);
+    this.getCircleTables(this.roomId);
+    this.getRectangleTables(this.roomId);
+  }
+
+  getSeats(): void {
+    this.mapService.getSeats(this.roomId).subscribe((seats) => {
+      this.seats = seats;
+    });
   }
 
   seatClicked(seat: Seat) {
-    if (this.mapService.isSeatClicked(seat)) {
-      this.mapService.removeClickedSeat(seat);
+    if (this.isReservable(seat)) {
+      if (this.mapService.isSeatClicked(seat)) {
+        this.mapService.removeClickedSeat(seat);
+      } else {
+        this.mapService.addClickedSeat(seat);
+      }
     } else {
-      this.mapService.addClickedSeat(seat);
+      this.snackBar.open('This seat is already reserved', 'Close', {
+        duration: 3000
+      });
     }
+  }
+
+  getBoundaries(id: string) {
+    this.mapService.getBoundaries(id).subscribe((boundaries) => {
+      this.boundaries = boundaries;
+    });
+  }
+
+  getCircleTables(id: string) {
+    this.mapService.getCircleTables(id).subscribe((circleTables) => {
+      this.circleTables = circleTables;
+    });
+    console.log(this.circleTables);
+  }
+
+  getRectangleTables(id: string) {
+    this.mapService.getRectangleTables(id).subscribe((rectangleTables) => {
+      this.rectangleTables = rectangleTables;
+    });
+  }
+
+  isReservable(seat: Seat) {
+    return seat.reservable;
   }
 
   isButtonActive(): boolean {
@@ -42,13 +96,20 @@ export class SeatMapWidgetComponent implements OnInit {
   }
 
   reserveSeats() {
-    this.seatsReserved = this.mapService.getClickedSeats();
-    this.mapService.reserveSeats(this.seatsReserved);
-    let reservedSeatAvails: SeatAvailability[] =
-      this.mapService.convertSeatsToSeatAvailability(this.seatsReserved);
-    this.coworkService.draftReservation(reservedSeatAvails).subscribe({
-      next: (value) => this.reserveService.confirm(value)
-    });
+    const clickedSeats = this.mapService.getClickedSeats();
+    const reservations: SeatAvailability[] = clickedSeats.map((seat) => ({
+      id: seat.id,
+      availability: seat.availability,
+      title: seat.title,
+      shorthand: seat.shorthand,
+      reservable: seat.reservable,
+      has_monitor: seat.has_monitor,
+      sit_stand: seat.sit_stand,
+      x: seat.x,
+      y: seat.y
+    }));
+    this.reservationDrafted.emit(reservations);
+    this.mapService.clearReservations();
   }
 
   clearReserves() {

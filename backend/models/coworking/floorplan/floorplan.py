@@ -11,6 +11,4 @@ from backend.models.room import Room
 class Floorplan(BaseModel):
     id: int
     boundaries: str
-
-
-
+    room: Room | None = None

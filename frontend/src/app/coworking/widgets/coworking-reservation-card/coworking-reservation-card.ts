@@ -5,7 +5,10 @@
  */
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Reservation } from 'src/app/coworking/coworking.models';
+import {
+  Reservation,
+  SeatAvailability
+} from 'src/app/coworking/coworking.models';
 import { Observable, map, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { RoomReservationService } from '../../room-reservation/room-reservation.service';
@@ -19,6 +22,7 @@ import { CoworkingService } from '../../coworking.service';
 })
 export class CoworkingReservationCard implements OnInit {
   @Input() reservation!: Reservation;
+  @Input() reservations: SeatAvailability[] = [];
   @Output() updateReservationsList = new EventEmitter<void>();
   @Output() isConfirmed = new EventEmitter<boolean>();
   @Output() updateActiveReservation = new EventEmitter<void>();
@@ -47,10 +51,16 @@ export class CoworkingReservationCard implements OnInit {
    */
   ngOnInit(): void {
     this.draftConfirmationDeadline$ = this.initDraftConfirmationDeadline();
+    console.log(this.reservation.seats)
   }
 
-  checkinDeadline(reservationStart: Date): Date {
-    return new Date(reservationStart.getTime() + 10 * 60 * 1000);
+  checkinDeadline(reservationStart: Date, reservationEnd: Date): Date {
+    return new Date(
+      Math.min(
+        reservationStart.getTime() + 10 * 60 * 1000,
+        reservationEnd.getTime()
+      )
+    );
   }
 
   cancel() {
@@ -163,22 +173,21 @@ export class CoworkingReservationCard implements OnInit {
 
   /**
    * Evaluates if the cancel operation is expanded or if check-in is allowed.
-   * 
+   *
    * Combines the observable `isCancelExpanded$` with the result of `checkCheckinAllowed()` to
    * determine the UI state. It uses RxJS's `map` to emit true if either condition is met: the
    * cancel operation is expanded (`isCancelExpanded$` is true) or check-in is allowed (`checkCheckinAllowed()`
    * returns true).
-   * 
+   *
    * @returns {Observable<boolean>} Observable that emits true if either condition is true, otherwise false.
-   * 
+   *
    * Usage:
    * Can be used in Angular templates with async pipe for conditional UI rendering:
    * `<ng-container *ngIf="isExpandedOrAllowCheckin() | async">...</ng-container>`
    */
   isExpandedOrAllowCheckin(): Observable<boolean> {
     return this.isCancelExpanded$.pipe(
-      map(isCancelExpanded => isCancelExpanded || this.checkCheckinAllowed())
+      map((isCancelExpanded) => isCancelExpanded || this.checkCheckinAllowed())
     );
   }
-  
 }

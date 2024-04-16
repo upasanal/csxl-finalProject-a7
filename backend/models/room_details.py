@@ -3,6 +3,7 @@
 Importantly, it includes a room's seats, if seats are reservable as in the XL collab.
 """
 
+from typing import Optional
 from backend.models.coworking.floorplan.floorplan import Floorplan
 from .room import Room
 from .coworking.seat import Seat
@@ -18,7 +19,7 @@ class RoomDetails(Room):
     capacity: int
     reservable: bool
     seats: list[Seat] = []
-    floorplan: Floorplan | None
+    floorplan: Optional[Floorplan] = None
 
     def to_room(self) -> Room:
         """Converts the details model to a room model.

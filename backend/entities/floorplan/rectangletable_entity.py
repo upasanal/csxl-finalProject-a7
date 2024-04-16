@@ -3,6 +3,10 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from backend.models.coworking.floorplan.rectangle_table_details import (
+    RectangleTableDetails,
+)
+
 from ..entity_base import EntityBase
 from typing import Self, Optional
 from backend.models.coworking.floorplan.rectangle_table import RectangleTable
@@ -11,31 +15,38 @@ __authors__ = ["Ellie Kim, Shreeya Kantamsetty"]
 __copyright__ = "Copyright 2024"
 __license__ = "MIT"
 
+
 class RectangleTableEntity(EntityBase):
     """Entity for rectangular tables within floorplans under XL management."""
 
     __tablename__ = "rectangle"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    x: Mapped[str] = mapped_column(Integer)
+    x: Mapped[str] = mapped_column(String)
     y: Mapped[str] = mapped_column(String)
     width: Mapped[str] = mapped_column(String)
     height: Mapped[str] = mapped_column(String)
     fill: Mapped[str] = mapped_column(String)
 
-    floorplan_id = Column(Integer, ForeignKey('floorplan.id'))
+    floorplan_id = mapped_column(Integer, ForeignKey("floorplan.id"))
     floorplan = relationship("FloorplanEntity", back_populates="rectangle_tables")
 
-    def to_model(self) -> RectangleTable:
+    def to_model(self) -> RectangleTableDetails:
         """Converts the entity to a model.
 
         Returns:
             Room: The model representation of the entity."""
-        return RectangleTable(id = self.id, x = self.x, y = self.y, width = self.width, height = self.height, fill = self.fill)
-
+        return RectangleTableDetails(
+            id=self.id,
+            x=self.x,
+            y=self.y,
+            width=self.width,
+            height=self.height,
+            fill=self.fill,
+        )
 
     @classmethod
-    def from_model(cls, model: RectangleTable) -> Self:
+    def from_model(cls, model: RectangleTableDetails) -> Self:
         """Create an RoomEntity from a Room model.
 
         Args:
@@ -50,4 +61,5 @@ class RectangleTableEntity(EntityBase):
             width=model.width,
             height=model.height,
             fill=model.fill,
+            floorplan_id=model.floorplan.id,
         )

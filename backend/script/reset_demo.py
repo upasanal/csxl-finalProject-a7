@@ -14,14 +14,24 @@ import sys
 import subprocess
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+
 from ..database import engine
 from ..env import getenv
 from .. import entities
 
 from ..test.services import role_data, user_data, permission_data, room_data
+from ..test.services.coworking import (
+    floorplan_data,
+    rectangle_tables_data,
+    circle_tables_data,
+)
 from ..test.services.organization import organization_demo_data
 from ..test.services.event import event_demo_data
-from ..test.services.coworking import seat_data, operating_hours_data, time
+from ..test.services.coworking import (
+    seat_data,
+    operating_hours_data,
+    time,
+)
 from ..test.services.coworking.reservation import reservation_data
 from ..test.services.academics import course_data, term_data, section_data
 
@@ -59,5 +69,9 @@ with Session(engine) as session:
     course_data.insert_fake_data(session)
     term_data.insert_fake_data(session)
     section_data.insert_fake_data(session)
+    floorplan_data.insert_fake_data(session)
+    rectangle_tables_data.insert_fake_data(session)
+    circle_tables_data.insert_fake_data(session)
+
     # Commit changes to the database
     session.commit()

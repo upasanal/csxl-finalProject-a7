@@ -76,12 +76,16 @@ class ReservationEntity(EntityBase):
             state=model.state,
             walkin=model.walkin,
             room_id=model.room.id if model.room else None,
-            users=[session.get(UserEntity, user.id) for user in model.users]
-            if session
-            else [],
-            seats=[session.get(SeatEntity, seat.id) for seat in model.seats]
-            if session
-            else [],
+            users=(
+                [session.get(UserEntity, user.id) for user in model.users]
+                if session
+                else []
+            ),
+            seats=(
+                [session.get(SeatEntity, seat.id) for seat in model.seats]
+                if session
+                else []
+            ),
             created_at=model.created_at,
             updated_at=model.updated_at,
         )

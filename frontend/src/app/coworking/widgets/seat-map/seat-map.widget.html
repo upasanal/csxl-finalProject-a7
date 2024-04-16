@@ -1,29 +1,24 @@
 <mat-card>
-        <svg viewBox="0 0 150 170">
+        <svg [attr.viewBox]="boundaries">
             
-    <rect x="0" y="0" width="8" height="40" fill="gray"></rect>
-            
-    <rect x="40" y="0" width="8" height="60" fill="gray"></rect>
-            
-    <rect x="48" y="0" width="8" height="60" fill="gray"></rect>
-            
-    <rect x="85" y="0" width="8" height="60" fill="gray"></rect>
-            
-    <rect x="93" y="0" width="8" height="60" fill="gray"></rect>
-            
-    <rect x="142" y="0" width="8" height="80" fill="gray"></rect>
-            
-    <rect x="142" y="0" width="8" height="80" fill="gray"></rect>
-            
-    <rect x="100" y="90" width="25" height="60" fill="gray"></rect>
-            
-    <circle cx="25" cy="80" r="10" fill="gray"></circle>
-            
-    <circle cx="60" cy="105" r="10" fill="gray"></circle>
-            
-    <circle cx="25" cy="130" r="10" fill="gray"></circle>
-            
-    <rect x="0" y="162" width="60" height="8" fill="gray"></rect>
+    <ng-container *ngFor="let rect of rectangleTables">
+      <rect
+        [attr.x]="rect.x"
+        [attr.y]="rect.y"
+        [attr.width]="rect.width"
+        [attr.height]="rect.height"
+        fill="gray">
+      </rect>
+    </ng-container>
+
+    <ng-container *ngFor="let circle of circleTables">
+      <circle
+        [attr.cx]="circle.cx"
+        [attr.cy]="circle.cy"
+        [attr.r]="circle.radius"
+        fill="gray">
+      </circle>
+    </ng-container>
             
     <ng-container *ngFor="let seat of seats">
                 
@@ -32,7 +27,7 @@
         <circle
           [attr.cx]="seat.x"
           [attr.cy]="seat.y"
-          r="4"
+          [attr.r]="4"
           [style.fill]="getSeatColor(seat)" />
                     
         <text [attr.x]="seat.x" [attr.y]="seat.y" class="circle">
@@ -45,17 +40,6 @@
           
   </svg>
 </mat-card>
-<button
-  mat-stroked-button
-  class="button"
-  [class.active]="isButtonActive()"
-  (click)="reserveSeats()">
-  Reserve Seats
-</button>
-<button mat-stroked-button class="button" (click)="clearReserves()">
-  Clear Reservations
-</button>
-
 <!-- This HTML code was taken from new-reservation-page.component.html with an addition of Unavailable Seats -->
 <mat-card>
   <div class="legend-container">
@@ -86,3 +70,28 @@
       
   </div>
 </mat-card>
+
+<mat-card>
+  <!-- Display clicked seats -->
+  <mat-card-title>Clicked Seats</mat-card-title>
+  <mat-card-content>
+    <ul>
+      <li *ngFor="let seat of this.mapService.clickedSeats">
+        {{ seat.title }}
+      </li>
+    </ul>
+  </mat-card-content>
+</mat-card>
+
+<button
+  mat-stroked-button
+  class="button"
+  [class.active]="isButtonActive()"
+  (click)="reserveSeats()">
+  Reserve Seats
+</button>
+<button mat-stroked-button class="button" (click)="clearReserves()">
+  Clear Reservations
+</button>
+
+

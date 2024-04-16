@@ -1,6 +1,11 @@
 """Tests for Coworking Rooms Service."""
+
 from unittest.mock import create_autospec
 import pytest
+from backend.models.coworking.floorplan.circle_table_details import CircleTableDetails
+from backend.models.coworking.floorplan.floorplan_details import FloorplanDetails
+from backend.models.coworking.floorplan.rectangle_table_details import RectangleTableDetails
+from backend.models.coworking.seat_details import SeatDetails
 from backend.services.exceptions import (
     ResourceNotFoundException,
     UserPermissionException,
@@ -49,7 +54,66 @@ def test_get_by_id_not_found(room_svc: RoomService):
     with pytest.raises(ResourceNotFoundException):
         room = room_svc.get_by_id("500")
         pytest.fail()  # Fail test if no error was thrown above
+    
+def test_get_seats_by_id(room_svc: RoomService): 
+    seats = room_svc.get_seats_by_id(room_data.the_xl.id)
+    if seats is not None: 
+        if (len(seats) > 0):
+            for seat in seats:
+                assert isinstance(seat, SeatDetails)
+                assert seat.room.id == room_data.the_xl.id
+        else: 
+            print(f"There were no seats for this id: {room_data.the_xl.id}")
 
+def test_get_seats_by_id_invalid_room_id(room_svc: RoomService):
+    invalid_room_id = "SN189"
+    with pytest.raises(ResourceNotFoundException):
+        room_svc.get_seats_by_id(invalid_room_id)
+
+def test_get_boundaries_by_id(room_svc: RoomService):
+    boundaries = room_svc.get_boundaries_by_room_id(room_data.the_xl.id)
+    if boundaries is not None: 
+        assert isinstance(boundaries, str)
+
+def test_get_boundaries_by_invalid_room_id(room_svc: RoomService):
+    invalid_room_id = "SN189"
+    with pytest.raises(ResourceNotFoundException):
+        room_svc.get_boundaries_by_room_id(invalid_room_id)
+    
+def test_get_floorplan_by_id(room_svc: RoomService): 
+    floorplan = room_svc.get_floorplan_by_room_id(room_data.the_xl.id)
+    if floorplan is not None: 
+        assert isinstance(floorplan, FloorplanDetails)
+        assert floorplan.room.id == room_data.the_xl.id
+
+def test_get_floorplan_by_invalid_room_id(room_svc: RoomService):
+    invalid_room_id = "SN189"
+    with pytest.raises(ResourceNotFoundException):
+        room_svc.get_floorplan_by_room_id(invalid_room_id)
+
+def test_get_circletables_by_id(room_svc: RoomService): 
+    circle_tables = room_svc.get_circletables_by_room_id(room_data.the_xl.id)
+    if circle_tables is not None: 
+        for circle_table in circle_tables: 
+            assert isinstance(circle_table, CircleTableDetails)
+            assert circle_table.floorplan.room.id == room_data.the_xl.id
+
+def test_get_circletables_by_invalid_room_id(room_svc: RoomService):
+    invalid_room_id = "SN189"
+    with pytest.raises(ResourceNotFoundException):
+        room_svc.get_circletables_by_room_id(invalid_room_id)
+
+def test_get_rectangletables_by_id(room_svc: RoomService): 
+    rectangle_tables = room_svc.get_rectangletables_by_room_id(room_data.the_xl.id)
+    if rectangle_tables is not None: 
+        for rectangle_table in rectangle_tables: 
+            assert isinstance(rectangle_table, CircleTableDetails)
+            assert rectangle_table.floorplan.room.id == room_data.the_xl.id
+
+def test_get_rectangletables_by_invalid_room_id(room_svc: RoomService):
+    invalid_room_id = "SN189"
+    with pytest.raises(ResourceNotFoundException):
+        room_svc.get_rectangletables_by_room_id(invalid_room_id)
 
 def test_create_as_root(room_svc: RoomService):
     permission_svc = create_autospec(PermissionService)
@@ -123,3 +187,4 @@ def test_delete_as_user(room_svc: RoomService):
     with pytest.raises(UserPermissionException):
         room = room_svc.delete(user_data.user, room_data.the_xl.id)
         pytest.fail()
+

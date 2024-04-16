@@ -65,5 +65,7 @@
     fill: green;
 }
   
-
+.clicked {
+    background-color: rgb(71, 134, 198);
+}
   

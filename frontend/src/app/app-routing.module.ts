@@ -10,7 +10,6 @@ import { CsxlSeatMapComponent } from './coworking/seating-reservation/csxl-seat-
 const routes: Routes = [
   HomeComponent.Route,
   AboutComponent.Route,
-  ProfileEditorComponent.Route,
   GateComponent.Route,
   {
     path: 'coworking',
@@ -19,6 +18,12 @@ const routes: Routes = [
       import('./coworking/coworking.module').then((m) => m.CoworkingModule)
   },
   { path: 'coworking/seat-map', component: CsxlSeatMapComponent },
+  {
+    path: 'profile',
+    title: 'Profile',
+    loadChildren: () =>
+      import('./profile/profile.module').then((m) => m.ProfileModule)
+  },
   {
     path: 'academics',
     title: 'Academics',

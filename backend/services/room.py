@@ -3,12 +3,21 @@ The Room Service allows the API to manipulate rooms data in the database.
 """
 
 from typing import Optional
+from typing import Optional
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from backend.entities.floorplan.floorplan_entity import FloorplanEntity
+from backend.models.coworking.floorplan.circle_table import CircleTable
 
+from backend.models.coworking.floorplan.circle_table_details import CircleTableDetails
 from backend.models.coworking.floorplan.floorplan import Floorplan
+from backend.models.coworking.floorplan.floorplan_details import FloorplanDetails
+from backend.models.coworking.floorplan.rectangle_table import RectangleTable
+from backend.models.coworking.floorplan.rectangle_table_details import (
+    RectangleTableDetails,
+)
+from backend.models.coworking.seat_details import SeatDetails
 
 
 from ..database import db_session
@@ -69,21 +78,48 @@ class RoomService:
 
         # Return the model
         return entity.to_details_model()
-    
+
     """Based on a given room by id, it obtains the floorplan of the room."""
 
-    def get_floorplan_by_id(self, id: int) -> Optional[Floorplan]:
-        """ Get the floorplan with the given id of the room."""
-        room_entity = self._session.query(RoomEntity).filter(RoomEntity.id == id).first()
-        if room_entity:
-            return room_entity.floorplan
-        else:
+    def get_seats_by_id(self, id: str) -> Optional[list[SeatDetails]]:
+        room_entity = self._session.query(RoomEntity).filter_by(id=id).first()
+        if room_entity is None: 
+            raise ResourceNotFoundException(f"Room with id: {id} does not exist.")
+        seats = [seat_entity.to_model() for seat_entity in room_entity.seats]
+        return seats
+
+    def get_floorplan_by_room_id(self, id: str) -> Optional[FloorplanDetails]:
+        """Get the floorplan with the given id of the room."""
+        room_entity = self._session.query(RoomEntity).filter_by(id=id).first()
+        if room_entity is None: 
+            raise ResourceNotFoundException(f"Room with id: {id} does not exist.")
+        if room_entity.floorplan is not None: 
+            return room_entity.floorplan.to_model()
+
+    def get_boundaries_by_room_id(self, id: str) -> Optional[str]:
+        floorplan_model = self.get_floorplan_by_room_id(id)
+        if floorplan_model is not None: 
+            return floorplan_model.boundaries
+        else: 
             return None
 
+    def get_circletables_by_room_id(self, id: str) -> Optional[list[CircleTableDetails]]:
+        floorplan_model = self.get_floorplan_by_room_id(id)
+        if floorplan_model is not None: 
+            return floorplan_model.circle_tables
+        else: 
+            return None
+
+    def get_rectangletables_by_room_id(self, id: str) -> Optional[list[RectangleTableDetails]]:
+        floorplan_model = self.get_floorplan_by_room_id(id)
+        if floorplan_model is not None: 
+            return floorplan_model.rectangle_tables
+        else: 
+            return None
 
     def create(self, subject: User, room: RoomDetails) -> RoomDetails:
         """Creates a new room.
-
+ 
         Args:
             subject: a valid User model representing the currently logged in User
             room: Room to add to table
@@ -160,4 +196,3 @@ class RoomService:
         # Delete and commit changes
         self._session.delete(room_entity)
         self._session.commit()
-    

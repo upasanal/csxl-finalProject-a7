@@ -10,6 +10,7 @@ import { Seat, SeatAvailability } from 'src/app/coworking/coworking.models';
 import { CsxlSeatMapService } from '../../seating-reservation/csxl-seat-map/csxl-seat-map.service';
 import { CoworkingPageComponent } from '../../coworking-home/coworking-home.component';
 import { CoworkingService } from '../../coworking.service';
+import { PublicProfile } from 'src/app/profile/profile.service';
 class SeatCategory {
   public title: string;
 
@@ -84,6 +85,7 @@ const COLLAB_AREA = 2;
 export class CoworkingDropInCard implements OnChanges {
   @Input() seat_availability!: SeatAvailability[];
   @Output() seatsSelected = new EventEmitter<SeatAvailability[]>();
+  @Input() users!: PublicProfile[];
 
   public categories: SeatCategory[];
 
@@ -95,7 +97,7 @@ export class CoworkingDropInCard implements OnChanges {
   }
 
   navigateToSeatMap() {
-    this.mapService.navigateToSeatMap();
+    this.mapService.navigateToSeatMap(this.users);
   }
 
   getOpenHours() {
@@ -117,8 +119,8 @@ export class CoworkingDropInCard implements OnChanges {
       }
     }
   }
-  // When a user selects a seat category from the drop-down list, this method is triggered. 
-  // It emits an event with an array of SeatAvailability objects corresponding to the selected seats. 
+  // When a user selects a seat category from the drop-down list, this method is triggered.
+  // It emits an event with an array of SeatAvailability objects corresponding to the selected seats.
   reserve(category: SeatCategory): void {
     this.seatsSelected.emit([
       ...category.seats_available_now,
@@ -130,7 +132,7 @@ export class CoworkingDropInCard implements OnChanges {
     return [
       new SeatCategory('Sitting Desk with Monitor'),
       new SeatCategory('Standing Desk with Monitor'),
-      new SeatCategory('Communal Area Seat')
+      new SeatCategory('Communal Area')
     ];
   }
 }

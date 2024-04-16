@@ -3,8 +3,11 @@
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey
 
 from backend.entities.coworking import SeatEntity
+from backend.entities.floorplan.floorplan_entity import FloorplanEntity
+from backend.entities.floorplan.floorplan_entity import FloorplanEntity
 from .entity_base import EntityBase
 from ..models import Room, RoomDetails
 from typing import Self, Optional
@@ -28,6 +31,10 @@ class RoomEntity(EntityBase):
     nickname: Mapped[str] = mapped_column(String)
     reservable: Mapped[bool] = mapped_column(Boolean)
 
+    floorplan: Mapped[FloorplanEntity] = relationship(
+        "FloorplanEntity", back_populates="room"
+    )
+
     seats: Mapped[list["SeatEntity"]] = relationship(  # type: ignore
         "SeatEntity", back_populates="room"
     )
@@ -36,9 +43,7 @@ class RoomEntity(EntityBase):
         back_populates="room"
     )
 
-    # Relationship Field
-    # Stores the one to one relationship between the room and the floorplan
-    room_for: Mapped["FloorplanEntity"]  = relationship("FloorplanEntity", back_populates = "room")
+    # Relationship Fields
 
     def to_model(self) -> Room:
         """Converts the entity to a model.
@@ -60,7 +65,6 @@ class RoomEntity(EntityBase):
             capacity=self.capacity,
             reservable=self.reservable,
             seats=[seat.to_model() for seat in self.seats],
-            floorplan = self.floorplan,
         )
 
     @classmethod

@@ -1,49 +1,56 @@
 """Entity for Room."""
 
 from sqlalchemy import ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, Session
 
 from backend.entities.floorplan.circletable_entity import CircleTableEntity
 from backend.entities.floorplan.rectangletable_entity import RectangleTableEntity
-from backend.entities.room_entity import RoomEntity
+from backend.models.coworking.floorplan.circle_table import CircleTable
+from backend.models.coworking.floorplan.floorplan_details import FloorplanDetails
+from backend.models.coworking.floorplan.rectangle_table import RectangleTable
 from ..entity_base import EntityBase
 from typing import Self
-from backend.models.coworking.floorplan.floorplan import Floorplan
 
 __authors__ = ["Ellie Kim, Shreeya Kantamsetty"]
 __copyright__ = "Copyright 2024"
 __license__ = "MIT"
+
 
 class FloorplanEntity(EntityBase):
     """Entity for floorplans for rooms under XL management."""
 
     __tablename__ = "floorplan"
 
-    # Fields
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
     boundaries: Mapped[str] = mapped_column(String)
+    room_id: Mapped[int] = mapped_column(String, ForeignKey("room.id"), nullable=True)
 
-    #RoomDetails Model Fields Follow
+    # relationships
+    room: Mapped["RoomEntity"] = relationship("RoomEntity", back_populates="floorplan")
+    circle_tables: Mapped[list["CircleTableEntity"]] = relationship(
+        "CircleTableEntity", back_populates="floorplan"
+    )
+    rectangle_tables: Mapped[list["RectangleTableEntity"]] = relationship(
+        "RectangleTableEntity", back_populates="floorplan"
+    )
 
-    # Establishes a one to one relationship between the floorplan and the room tables.
-    room_id: Mapped[int] = mapped_column(ForeignKey("room.id"))
-
-    # Relationship Field
-
-    # Stores the room data of the floorplan, populated automatically by SQLAlchemy using the foriengn key column we defined above.
-    room: Mapped["RoomEntity"] = relationship(back_populates = "room_for")
-
-    # Stores the circular tables this floor plan has, populated automatically by SQLAlchemy using the foreign key column we defined above
-    circle_tables: Mapped[list["CircleTableEntity"]] = relationship("CircleTableEntity", back_populates = "floorplan")
-
-    rectangle_tables: Mapped[list["RectangleTableEntity"]] = relationship("RectangleTableEntity", back_populates = "floorplan")
-
-    def to_model(self) -> Floorplan:
-        return Floorplan(id = self.id, boundaries = self.boundaries)
-    
+    def to_model(self) -> FloorplanDetails:
+        floorplan = FloorplanDetails(
+            id=self.id,
+            boundaries=self.boundaries,
+            room=self.room.to_model() if self.room else None,
+            circle_tables=[
+                circle_table.to_model() for circle_table in self.circle_tables],
+            rectangle_tables=[
+                rectangle_table.to_model() for rectangle_table in self.rectangle_tables
+            ],
+        )
+        return floorplan
 
     @classmethod
-    def from_model(cls, model: Floorplan) -> Self:
+    def from_model(
+        cls, model: FloorplanDetails, session: Session | None = None
+    ) -> Self:
         """Create an RoomEntity from a Room model.
 
         Args:
@@ -53,5 +60,6 @@ class FloorplanEntity(EntityBase):
             Self: The entity (not yet persisted)."""
         return cls(
             id=model.id,
-            boundaries=model.boundaries
+            boundaries=model.boundaries,
+            room_id=model.room.id if model.room else None,
         )

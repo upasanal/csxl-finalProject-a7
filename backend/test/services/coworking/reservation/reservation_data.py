@@ -46,7 +46,7 @@ def instantiate_global_models(time: dict[str, datetime]):
     reservation_1 = Reservation(
         id=1,
         start=time[THIRTY_MINUTES_AGO],
-        end=time[IN_THIRTY_MINUTES],
+        end=time[IN_TEN_MINUTES],
         created_at=time[THIRTY_MINUTES_AGO],
         updated_at=time[THIRTY_MINUTES_AGO],
         walkin=False,
@@ -132,12 +132,12 @@ def instantiate_global_models(time: dict[str, datetime]):
     confirmed_reservations = [reservation_4]
     draft_reservations = [reservation_5]
     reservations = [
-        reservation_1,
-        reservation_2,
-        reservation_3,
-        reservation_4,
-        reservation_5,
-        reservation_6,
+        #reservation_1,
+        #reservation_2,
+        #reservation_3,
+        #reservation_4,
+        #reservation_5,
+        #reservation_6,
     ]
 
 

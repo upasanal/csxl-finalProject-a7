@@ -33,7 +33,6 @@ import { AmbassadorXlListComponent } from './ambassador-home/ambassador-xl/list/
 import { AmbassadorRoomListComponent } from './ambassador-home/ambassador-room/list/ambassador-room-list.component';
 import { CsxlSeatMapComponent } from './seating-reservation/csxl-seat-map/csxl-seat-map.component';
 import { SeatMapWidgetComponent } from './widgets/seat-map/seat-map.widget';
-
 @NgModule({
   declarations: [
     NewReservationPageComponent,
@@ -50,7 +49,7 @@ import { SeatMapWidgetComponent } from './widgets/seat-map/seat-map.widget';
     NewReservationPageComponent,
     DateSelector,
     OperatingHoursDialog,
-    CsxlSeatMapComponent, 
+    CsxlSeatMapComponent,
     SeatMapWidgetComponent
   ],
   imports: [

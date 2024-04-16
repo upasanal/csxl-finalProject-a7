@@ -1,3 +1,10 @@
+from backend.models.coworking.floorplan.circle_table import CircleTable
+from backend.models.coworking.floorplan.circle_table_details import CircleTableDetails
+from backend.models.coworking.floorplan.floorplan import Floorplan
+from backend.models.coworking.floorplan.rectangle_table import RectangleTable
+from backend.models.coworking.floorplan.rectangle_table_details import (
+    RectangleTableDetails,
+)
 from .seat import Seat
 from .seat_details import SeatDetails
 
@@ -33,4 +40,9 @@ __all__ = [
     "RoomAvailability",
     "SeatAvailability",
     "Status",
+    "CircleTable",
+    "CircleTableDetails",
+    "RectangleTable",
+    "RectangleTableDetails",
+    "Floorplan",
 ]

@@ -33,6 +33,26 @@ export interface Seat {
   y: number;
 }
 
+export interface Floorplan {
+  id: number;
+  boundaries: string;
+  circle_tables: CircleTable[];
+  rectangle_tables: RectangleTable[];
+}
+
+export interface CircleTable  {
+  cx: number;
+  cy: number;
+  id: number;
+  radius: string;
+  fill: string | null;
+}
+
+export interface RectangleTable extends Table {
+  width: string;
+  height: string;
+  fill: string | null;
+}
 export interface Table {
   id: number;
   x: number;

@@ -68,10 +68,9 @@ export class CoworkingService implements OnDestroy {
         return { id: seatAvailability.id };
       }),
       start,
-      end,
+      end
     };
     console.log(this.profile);
-
 
     return this.http
       .post<ReservationJSON>('/api/coworking/reservation', reservation)
@@ -89,6 +88,10 @@ export class CoworkingService implements OnDestroy {
 
   getOperatingHours() {
     return this.openOperatingHours$;
+  }
+
+  getProfile(): Profile | undefined {
+    return this.profile;
   }
 
   /**
