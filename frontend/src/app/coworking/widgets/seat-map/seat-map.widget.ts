@@ -51,16 +51,20 @@ export class SeatMapWidgetComponent implements OnInit {
   }
 
   seatClicked(seat: Seat) {
-    if (this.isReservable(seat)) {
+    if (seat.reservable) {
       if (this.mapService.isSeatClicked(seat)) {
         this.mapService.removeClickedSeat(seat);
+        this.seatsClicked = this.seatsClicked.filter((s) => s !== seat);
       } else {
-        this.mapService.addClickedSeat(seat);
+        if (this.seatsClicked.length < 4) {
+          this.mapService.addClickedSeat(seat);
+          this.seatsClicked.push(seat);
+        } else {
+          this.snackBar.open('You can only select up to 4 seats.', 'Close', {
+            duration: 3000 // Duration in milliseconds
+          });
+        }
       }
-    } else {
-      this.snackBar.open('This seat is already reserved', 'Close', {
-        duration: 3000
-      });
     }
   }
 
@@ -114,6 +118,7 @@ export class SeatMapWidgetComponent implements OnInit {
 
   clearReserves() {
     this.mapService.clearReservations();
+    this.seatsClicked = [];
   }
 
   getSeatColor(seat: Seat): string {
