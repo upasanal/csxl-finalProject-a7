@@ -53,7 +53,7 @@ def test_get_by_id(room_svc: RoomService):
 def test_get_by_id_not_found(room_svc: RoomService):
     with pytest.raises(ResourceNotFoundException):
         room = room_svc.get_by_id("500")
-        pytest.fail()  # Fail test if no error was thrown above
+        pytest.fail() 
     
 def test_get_seats_by_id(room_svc: RoomService): 
     seats = room_svc.get_seats_by_id(room_data.the_xl.id)
@@ -64,6 +64,10 @@ def test_get_seats_by_id(room_svc: RoomService):
                 assert seat.room.id == room_data.the_xl.id
         else: 
             print(f"There were no seats for this id: {room_data.the_xl.id}")
+
+def test_put_seats_by_id(room_svc: RoomService): 
+    room = room_svc.get_by_id(room_data.the_xl.id)
+    room_svc.update
 
 def test_get_seats_by_id_invalid_room_id(room_svc: RoomService):
     invalid_room_id = "SN189"

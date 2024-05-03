@@ -102,6 +102,7 @@ class RoomService:
             )
         return seat_entity.to_model()
 
+
     def update_seat_by_ids(
         self, room_id: str, seat_id: int, x: int, y: int
     ) -> Optional[SeatDetails]:

@@ -96,6 +96,8 @@ export class CoworkingDropInCard implements OnChanges {
   @Input() operatingHours!: OperatingHours[];
   @Input() openOperatingHours?: OperatingHours;
 
+  @Input() ambassador?: Boolean;
+
   public categories: SeatCategory[];
   public seatsAvailable: Number[] = [];
 

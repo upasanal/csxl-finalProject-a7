@@ -22,7 +22,9 @@
                     <coworking-dropin-availability-card
             [seat_availability]="status.seat_availability"
             [users]="welcomeDeskReservationSelection"
-            (seatsSelected)="onWalkinSeatSelection($event)" />
+            (seatsSelected)="onWalkinSeatSelection($event)"
+            [ambassador]="true"
+            />
                   </ng-container
         >
               </ng-container
@@ -31,7 +33,6 @@
     >
       </mat-card
   >
-</div>
 <div *ngIf="upcomingReservations$ | async as reservations">
     <mat-card
     class="content"

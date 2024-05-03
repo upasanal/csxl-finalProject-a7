@@ -33,6 +33,7 @@ export class AmbassadorXlListComponent implements OnDestroy, OnInit {
   upcomingReservations$: Observable<Reservation[]>;
   activeReservations$: Observable<Reservation[]>;
 
+
   welcomeDeskReservationSelection: PublicProfile[] = [];
   status$: Observable<CoworkingStatus>;
 
@@ -78,6 +79,10 @@ export class AmbassadorXlListComponent implements OnDestroy, OnInit {
     if (users.length > 0) {
       this.coworkingService.pollStatus();
     }
+  }
+
+  getOperatingHours() {
+    return this.coworkingService.getOperatingHours;
   }
 
   onWalkinSeatSelection(seatSelection: SeatAvailability[]) {

@@ -3,7 +3,7 @@
   <mat-card-header class="dropin-header">
     <!--  class="user-name" -->
     <mat-card-title>Drop-in to The XL (SN156)</mat-card-title>
-    <ng-container *ngIf="openOperatingHours">
+    <ng-container *ngIf="openOperatingHours || ambassador">
     <button
         mat-button
       class="large-padding-button"
@@ -12,7 +12,7 @@
      </button>
     </ng-container>
 
-    <ng-container *ngIf="!openOperatingHours">
+    <ng-container *ngIf="!openOperatingHours && !ambassador">
       <button mat-button class="closed-padding-button">
       Reserve Seats
      </button>
