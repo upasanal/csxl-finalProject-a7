@@ -7,6 +7,7 @@ from typing import Optional
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from backend.entities.coworking.seat_entity import SeatEntity
 from backend.entities.floorplan.floorplan_entity import FloorplanEntity
 from backend.models.coworking.floorplan.circle_table import CircleTable
 
@@ -83,43 +84,95 @@ class RoomService:
 
     def get_seats_by_id(self, id: str) -> Optional[list[SeatDetails]]:
         room_entity = self._session.query(RoomEntity).filter_by(id=id).first()
-        if room_entity is None: 
+        if room_entity is None:
             raise ResourceNotFoundException(f"Room with id: {id} does not exist.")
         seats = [seat_entity.to_model() for seat_entity in room_entity.seats]
         return seats
 
+    def get_seat_by_ids(self, room_id: str, seat_id: int) -> Optional[SeatDetails]:
+        room_entity = self._session.query(RoomEntity).filter_by(id=room_id).first()
+        if room_entity is None:
+            raise ResourceNotFoundException(f"Room with id: {room_id} does not exist.")
+        seat_entity = next(
+            (seat for seat in room_entity.seats if seat.id == seat_id), None
+        )
+        if seat_entity is None:
+            raise ResourceNotFoundException(
+                f"Seat with id: {seat_id} in room {room_id} does not exist."
+            )
+        return seat_entity.to_model()
+
+    def update_seat_by_ids(
+        self, room_id: str, seat_id: int, x: int, y: int
+    ) -> Optional[SeatDetails]:
+        """
+        Updates a seat within a specific room.
+
+        Args:
+            subject: a valid User model representing the currently logged in User
+            room_id: the ID of the room to which the seat belongs
+            seat_id: the ID of the seat to update
+            seat: seartdetails to update the seat with
+
+        Returns:
+            SeatDetails: Object updated in the table
+
+        Raises:
+            ResourceNotFoundException: If the room or seat does not exist
+        """
+        room_entity = self._session.query(RoomEntity).filter_by(id=room_id).first()
+        if room_entity is None:
+            raise ResourceNotFoundException(f"Room with id: {room_id} does not exist.")
+        seat_entity = next(
+            (seat for seat in room_entity.seats if seat.id == seat_id), None
+        )
+        if seat_entity is None:
+            raise ResourceNotFoundException(
+                f"Seat with id: {seat_id} in room {room_id} does not exist."
+            )
+        seat_entity.x = x
+        seat_entity.y = y
+        # Commit changes
+        self._session.commit()
+        # Return edited object
+        return seat_entity.to_model()
+
     def get_floorplan_by_room_id(self, id: str) -> Optional[FloorplanDetails]:
         """Get the floorplan with the given id of the room."""
         room_entity = self._session.query(RoomEntity).filter_by(id=id).first()
-        if room_entity is None: 
+        if room_entity is None:
             raise ResourceNotFoundException(f"Room with id: {id} does not exist.")
-        if room_entity.floorplan is not None: 
+        if room_entity.floorplan is not None:
             return room_entity.floorplan.to_model()
 
     def get_boundaries_by_room_id(self, id: str) -> Optional[str]:
         floorplan_model = self.get_floorplan_by_room_id(id)
-        if floorplan_model is not None: 
+        if floorplan_model is not None:
             return floorplan_model.boundaries
-        else: 
+        else:
             return None
 
-    def get_circletables_by_room_id(self, id: str) -> Optional[list[CircleTableDetails]]:
+    def get_circletables_by_room_id(
+        self, id: str
+    ) -> Optional[list[CircleTableDetails]]:
         floorplan_model = self.get_floorplan_by_room_id(id)
-        if floorplan_model is not None: 
+        if floorplan_model is not None:
             return floorplan_model.circle_tables
-        else: 
+        else:
             return None
 
-    def get_rectangletables_by_room_id(self, id: str) -> Optional[list[RectangleTableDetails]]:
+    def get_rectangletables_by_room_id(
+        self, id: str
+    ) -> Optional[list[RectangleTableDetails]]:
         floorplan_model = self.get_floorplan_by_room_id(id)
-        if floorplan_model is not None: 
+        if floorplan_model is not None:
             return floorplan_model.rectangle_tables
-        else: 
+        else:
             return None
 
     def create(self, subject: User, room: RoomDetails) -> RoomDetails:
         """Creates a new room.
- 
+
         Args:
             subject: a valid User model representing the currently logged in User
             room: Room to add to table

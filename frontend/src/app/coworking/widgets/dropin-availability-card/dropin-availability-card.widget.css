@@ -27,7 +27,13 @@
 
 .large-padding-button {
   font-size: 20px;
-  background-color: #612d23;
+  background: #256123;
+}
+
+.closed-padding-button {
+  font-size: 20px;
+  background: #612d23;
+  opacity: 0.5;
 }
 
 .mdc-list-item--with-leading-icon .mdc-list-item__start.unavailable {
@@ -97,4 +103,12 @@ mat-checkbox {
 
 a {
   text-decoration: none;
+}
+
+.open .badge {
+  background: #256123;
+}
+
+.closed .badge {
+  background: #612d23;
 }

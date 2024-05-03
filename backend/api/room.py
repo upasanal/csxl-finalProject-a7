@@ -4,7 +4,7 @@ Room routes are used to create, retrieve, and update Rooms."""
 
 from typing import Optional
 from typing import Optional
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from backend.models.coworking.floorplan.circle_table_details import CircleTableDetails
 from backend.models.coworking.floorplan.floorplan import Floorplan
 from backend.models.coworking.floorplan.floorplan_details import FloorplanDetails
@@ -62,12 +62,13 @@ def get_floorplan(
 ) -> Optional[FloorplanDetails]:
     return room_service.get_floorplan_by_room_id(id)
 
+
 @api.get("/{id}/boundaries", response_model=str, tags=["Rooms"])
 def get_boundaries(
     id: str,
     room_service: RoomService = Depends(),
 ) -> str:
-    return room_service.get_boundaries_by_room_id(id) 
+    return room_service.get_boundaries_by_room_id(id)
 
 
 @api.get("/{id}/circle_tables", response_model=list[CircleTableDetails], tags=["Rooms"])
@@ -168,6 +169,60 @@ def update_room(
     """
 
     return room_service.update(subject, room)
+
+
+@api.put("/{room_id}/seats/{seat_id}", tags=["(Admin) Seats"])
+def update_seat(
+    room_id: str,
+    seat_id: int,
+    x: int = Query(
+        ..., description="X coordinate of the seat"
+    ),  # Utilized chatGpt to learn about query usage
+    y: int = Query(..., description="Y coordinate of the seat"),
+    subject: User = Depends(registered_user),
+    room_service: RoomService = Depends(),
+) -> SeatDetails:
+    """
+    Update seat
+
+    Parameters:
+        seat: a valid seat model
+        room_id: a valid room ID
+        seat_id: a valid seat ID
+        subject: a valid User model representing the currently logged in User
+        room_service: a valid RoomService
+
+    Returns:
+        SeatDetails: Updated seat
+    """
+    return room_service.update_seat_by_ids(room_id, seat_id, x, y)
+
+
+@api.get(
+    "/{room_id}/seats/{seat_id}",
+    response_model=SeatDetails,
+    tags=["(Admin) Seats"],
+)
+def get_seat(
+    room_id: str,
+    seat_id: int,
+    subject: User = Depends(registered_user),
+    room_service: RoomService = Depends(),
+) -> SeatDetails:
+    """
+    Get seat
+
+    Parameters:
+        seat: a valid seat model
+        room_id: a valid room ID
+        seat_id: a valid seat ID
+        subject: a valid User model representing the currently logged in User
+        room_service: a valid RoomService
+
+    Returns:
+        SeatDetails: Get seat
+    """
+    return room_service.get_seat_by_ids(room_id, seat_id)
 
 
 @api.delete("/{id}", response_model=None, tags=["Rooms"])

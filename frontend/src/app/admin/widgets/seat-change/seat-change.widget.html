@@ -1,0 +1,47 @@
+<form [formGroup] = "seatForm"
+  (ngSubmit)="onSubmit()">
+  <mat-card>
+    <!-- Header -->
+    <mat-card-header>
+      <mat-card-title>Edit Seat Coordinates</mat-card-title>
+      <mat-card-subtitle>
+        After selecting a seat, adjust its coordinates for placement.
+      </mat-card-subtitle>
+    </mat-card-header>
+      <!-- Seat ID -->
+      <mat-card-content>
+        <mat-form-field appearance="outline" color = "accent">
+          <mat-label>Seat ID</mat-label>
+          <input matInput type="text" formControlName="seatId" class="form-control" required readonly>
+        </mat-form-field>
+
+      <!-- Seat Type -->
+      <mat-form-field appearance="outline" color="accent">
+        <mat-label>Seat Category</mat-label>
+        <input matInput type="text" formControlName="seatType" class="form-control" required readonly>
+      </mat-form-field>
+
+        <!-- X Coordinate-->
+        <mat-form-field appearance="outline" color = "accent">
+          <mat-label>X Coordinate</mat-label>
+          <input matInput type="number" id="xCoordinate" formControlName="xCoordinate" class="form-control">
+        </mat-form-field>
+
+        <!-- Y Coordinate-->
+        <mat-form-field appearance="outline" color = "accent">
+          <mat-label>Y Coordinate</mat-label>
+          <input matInput type="number" id="yCoordinate" formControlName="yCoordinate" class="form-control">
+        </mat-form-field>
+      </mat-card-content>
+
+      <!-- Submit Button -->
+      <mat-card-actions>
+        <button mat-stroked-button 
+                type="submit" 
+                [class.green-button]="seatForm.valid">
+          Submit
+        </button>
+      </mat-card-actions>
+
+  </mat-card>
+</form>

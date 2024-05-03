@@ -55,6 +55,7 @@ export class CoworkingService implements OnDestroy {
       .subscribe((status) => this.status.set(status));
   }
 
+
   draftReservation(seatSelection: SeatAvailability[]) {
     if (this.profile === undefined) {
       throw new Error('Only allowed for logged in users.');
@@ -86,9 +87,12 @@ export class CoworkingService implements OnDestroy {
     );
   }
 
+
   getOperatingHours() {
     return this.openOperatingHours$;
   }
+
+
 
   getProfile(): Profile | undefined {
     return this.profile;

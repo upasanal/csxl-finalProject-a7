@@ -6,11 +6,18 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { Seat, SeatAvailability } from 'src/app/coworking/coworking.models';
+import {
+  OperatingHours,
+  Seat,
+  SeatAvailability
+} from 'src/app/coworking/coworking.models';
 import { CsxlSeatMapService } from '../../seating-reservation/csxl-seat-map/csxl-seat-map.service';
 import { CoworkingPageComponent } from '../../coworking-home/coworking-home.component';
 import { CoworkingService } from '../../coworking.service';
 import { PublicProfile } from 'src/app/profile/profile.service';
+import { OperatingHoursDialog } from '../operating-hours-dialog/operating-hours-dialog.widget';
+import { Observable } from 'rxjs';
+
 class SeatCategory {
   public title: string;
 
@@ -86,8 +93,11 @@ export class CoworkingDropInCard implements OnChanges {
   @Input() seat_availability!: SeatAvailability[];
   @Output() seatsSelected = new EventEmitter<SeatAvailability[]>();
   @Input() users!: PublicProfile[];
+  @Input() operatingHours!: OperatingHours[];
+  @Input() openOperatingHours?: OperatingHours;
 
   public categories: SeatCategory[];
+  public seatsAvailable: Number[] = [];
 
   constructor(
     private mapService: CsxlSeatMapService,
@@ -117,6 +127,9 @@ export class CoworkingDropInCard implements OnChanges {
       } else {
         this.categories[COLLAB_AREA].push(seat);
       }
+    }
+    for (let seat of this.seat_availability) {
+      this.mapService.getAvailableSeats(seat.id);
     }
   }
   // When a user selects a seat category from the drop-down list, this method is triggered.

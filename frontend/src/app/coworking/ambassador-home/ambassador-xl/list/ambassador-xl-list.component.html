@@ -43,84 +43,65 @@
     >
         <mat-card-content>
             
-      <table mat-table [dataSource]="reservations">
-                <ng-container matColumnDef="id">
-                    
+      <table mat-table [dataSource]="reservations" class="mat-table">
+        <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>ID</th>
-                    
           <td mat-cell *matCellDef="let reservation">{{ reservation.id }}</td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="name">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Name</th>
-                    
           <td mat-cell *matCellDef="let reservation">
-                        {{ reservation.users[0].first_name }}             {{
-              reservation.users[0].last_name
-            }}
-                      
+            {{ reservation.users[0].first_name }}
+            {{ reservation.users[0].last_name }}
           </td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="start">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="start">
           <th mat-header-cell *matHeaderCellDef>Start</th>
-                    
           <td mat-cell *matCellDef="let reservation">
-                        {{ reservation.start | date: 'shortTime' }}           
+            {{ reservation.start | date: 'shortTime' }}
           </td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="end">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="end">
           <th mat-header-cell *matHeaderCellDef>End</th>
-                    
           <td mat-cell *matCellDef="let reservation">
-                        {{ reservation.end | date: 'shortTime' }}           
+            {{ reservation.end | date: 'shortTime' }}
           </td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="seat">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="seat">
           <th mat-header-cell *matHeaderCellDef>Seat</th>
-                    
           <td mat-cell *matCellDef="let reservation">
-                        <span *ngFor="let seat of reservation.seats">
-                            {{ seat.title }}<br />
-                          </span
-            >
-                      
+            <span *ngFor="let seat of reservation.seats"
+              >{{ seat.title }}<br
+            /></span>
           </td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="actions">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
-                    
-          <td mat-cell *matCellDef="let reservation">
-                        <button
+          <td mat-cell *matCellDef="let reservation" class="action-cell">
+            <button
               mat-stroked-button
               (click)="this.ambassadorService.checkIn(reservation)">
-                            Check-in             
+              Check-in
             </button>
-                        <button
+            <button
               mat-stroked-button
               (click)="this.ambassadorService.cancel(reservation)">
-                            Cancel             
+              Cancel
             </button>
-                      
           </td>
-                  </ng-container
-        >
-                
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                
         <tr
           mat-row
           *matRowDef="let reservation; columns: columnsToDisplay"></tr>
-              
       </table>
+
           </mat-card-content
     >
       </mat-card
@@ -150,78 +131,60 @@
     >
         <mat-card-content>
             
-      <table mat-table [dataSource]="reservations">
-                <ng-container matColumnDef="id">
-                    
+      <table mat-table [dataSource]="reservations" class="mat-table">
+        <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>ID</th>
-                    
           <td mat-cell *matCellDef="let reservation">{{ reservation.id }}</td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="name">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Name</th>
-                    
           <td mat-cell *matCellDef="let reservation">
-                        {{ reservation.users[0].first_name }}             {{
-              reservation.users[0].last_name
-            }}
-                      
+            {{ reservation.users[0].first_name }}
+            {{ reservation.users[0].last_name }}
           </td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="start">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="start">
           <th mat-header-cell *matHeaderCellDef>Start</th>
-                    
           <td mat-cell *matCellDef="let reservation">
-                        {{ reservation.start | date: 'shortTime' }}           
+            {{ reservation.start | date: 'shortTime' }}
           </td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="end">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="end">
           <th mat-header-cell *matHeaderCellDef>End</th>
-                    
           <td mat-cell *matCellDef="let reservation">
-                        {{ reservation.end | date: 'shortTime' }}           
+            {{ reservation.end | date: 'shortTime' }}
           </td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="seat">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="seat">
           <th mat-header-cell *matHeaderCellDef>Seat</th>
-                    
           <td mat-cell *matCellDef="let reservation">
-                        <span *ngFor="let seat of reservation.seats">
-                            {{ seat.title }}<br />
-                          </span
-            >
-                      
+            <span *ngFor="let seat of reservation.seats"
+              >{{ seat.title }}<br
+            /></span>
           </td>
-                  </ng-container
-        >
-                <ng-container matColumnDef="actions">
-                    
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
-                    
-          <td mat-cell *matCellDef="let reservation">
-                        <button
+          <td mat-cell *matCellDef="let reservation" class="action-cell">
+            <button
               mat-stroked-button
               (click)="this.ambassadorService.checkOut(reservation)">
-                            Check-out</button
-            >&nbsp;           
+              Check-out
+            </button>
           </td>
-                  </ng-container
-        >
-                
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                
         <tr
           mat-row
           *matRowDef="let reservation; columns: columnsToDisplay"></tr>
-              
       </table>
+
           </mat-card-content
     >
       </mat-card

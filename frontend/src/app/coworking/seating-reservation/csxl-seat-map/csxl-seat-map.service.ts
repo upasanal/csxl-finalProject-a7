@@ -16,6 +16,8 @@ const ONE_HOUR = 60 * 60 * 1000;
 export class CsxlSeatMapService {
   public clickedSeats: Seat[] = [];
   private seats: Seat[] = [];
+  public seatAvailability: SeatAvailability[] = [];
+  public availableSeatsFromBackend: Number[] = [];
 
   constructor(
     protected http: HttpClient,
@@ -27,6 +29,10 @@ export class CsxlSeatMapService {
   navigateToSeatMap(users?: PublicProfile[]) {
     this.seatMapUserService.setUsers(users || []);
     this.router.navigateByUrl('/coworking/seat-map');
+  }
+
+  getAvailableSeats(seat_id: Number) {
+    this.availableSeatsFromBackend.push(seat_id);
   }
 
   getBoundaries(id: string): Observable<String> {
@@ -121,7 +127,6 @@ export class CsxlSeatMapService {
       };
       seatAvails.push(seatAvail);
     }
-    console.log('seatAvails:', seatAvails);
     return seatAvails;
   }
 

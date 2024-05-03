@@ -2,20 +2,22 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   CircleTable,
   RectangleTable,
-  Reservation,
+  Room,
   Seat,
   SeatAvailability
 } from 'src/app/coworking/coworking.models';
-import { CsxlSeatMapService } from '../../seating-reservation/csxl-seat-map/csxl-seat-map.service';
+import { CsxlSeatMapService } from 'src/app/coworking/seating-reservation/csxl-seat-map/csxl-seat-map.service';
+import { CoworkingService } from 'src/app/coworking/coworking.service';
+import { ReservationService } from 'src/app/coworking/reservation/reservation.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { RoomEditorComponent } from 'src/app/academics/academics-admin/room/room-editor/room-editor.component';
 
 @Component({
   selector: 'seat-map',
   templateUrl: './seat-map.widget.html',
   styleUrls: ['./seat-map.widget.css']
 })
-export class SeatMapWidgetComponent implements OnInit {
+export class AdminSeatMapWidgetComponent implements OnInit {
   seats: Seat[] = [];
   seatsClicked: Seat[] = [];
   seatsReserved: SeatAvailability[] = []; // seats only become reserved once user presses reserved button
@@ -23,17 +25,17 @@ export class SeatMapWidgetComponent implements OnInit {
   boundaries: String = '';
   rectangleTables: RectangleTable[] = [];
   circleTables: CircleTable[] = [];
-  public reservations: Reservation[] = [];
-  currentlySeatsReserved: Seat[] = [];
-  currentSeats: Seat[] = [];
-  public upcomingReservations$!: Observable<Reservation[]>;
-  public status: any;
-  public availableSeatIds: Number[] = [];
 
   roomId = 'SN156';
+  static room: Room = {
+    id: 'SN156',
+    nickname: 'The CSXL'
+  };
 
   constructor(
     public mapService: CsxlSeatMapService,
+    private coworkService: CoworkingService,
+    private reserveService: ReservationService,
     private snackBar: MatSnackBar
   ) {}
   // seats only become reserved once user presses reserved button
@@ -54,33 +56,28 @@ export class SeatMapWidgetComponent implements OnInit {
     });
   }
 
-  getAvailableSeats(): Number[] {
-    return this.mapService.availableSeatsFromBackend;
-  }
-
-  isSeatReserved(seat: Seat): Boolean {
-    return !this.getAvailableSeats().some((id: any) => id === seat.id);
-  }
-
   seatClicked(seat: Seat) {
-    if (!this.isSeatReserved(seat)) {
+    if (seat.reservable) {
       if (this.mapService.isSeatClicked(seat)) {
         this.mapService.removeClickedSeat(seat);
         this.seatsClicked = this.seatsClicked.filter((s) => s !== seat);
       } else {
-        if (this.seatsClicked.length < 4) {
+        if (this.seatsClicked.length < 1) {
           this.mapService.addClickedSeat(seat);
           this.seatsClicked.push(seat);
+          var selected_seat: SeatAvailability[] =
+            this.mapService.convertSeatsToSeatAvailability([seat]);
+          this.reservationDrafted.emit(selected_seat);
         } else {
-          this.snackBar.open('You can only select up to 4 seats.', 'Close', {
-            duration: 3000
-          });
+          this.snackBar.open(
+            'You can only select 1 seat to change at a time.',
+            'Close',
+            {
+              duration: 3000 // Duration in milliseconds
+            }
+          );
         }
       }
-    } else {
-      this.snackBar.open('This seat is currently reserved.', 'Close', {
-        duration: 3000
-      });
     }
   }
 
@@ -94,6 +91,7 @@ export class SeatMapWidgetComponent implements OnInit {
     this.mapService.getCircleTables(id).subscribe((circleTables) => {
       this.circleTables = circleTables;
     });
+    console.log(this.circleTables);
   }
 
   getRectangleTables(id: string) {
@@ -131,17 +129,22 @@ export class SeatMapWidgetComponent implements OnInit {
     this.mapService.clearReservations();
   }
 
+  clearReserves() {
+    this.mapService.clearReservations();
+    this.seatsClicked = [];
+  }
+
   getSeatColor(seat: Seat): string {
     if (!seat.reservable) {
-      return '#B0BEC5';
+      return 'grey';
     } else if (this.mapService.isSeatClicked(seat)) {
-      return '#FF5252';
+      return 'red';
     } else if (seat.sit_stand) {
       return 'orange';
     } else if (seat.has_monitor) {
-      return '#689F38';
+      return 'green';
     } else {
-      return '#3479be'; // Assuming you want to use the primary color defined in your theme
+      return '#3479be';
     }
   }
 }

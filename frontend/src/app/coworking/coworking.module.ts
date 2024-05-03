@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NewReservationPageComponent } from './room-reservation/new-reservation-page/new-reservation-page.component';
 import { RoomReservationWidgetComponent } from './widgets/room-reservation-table/room-reservation-table.widget';
 import { ConfirmReservationComponent } from './room-reservation/confirm-reservation/confirm-reservation.component';
+import { SeatMapWidgetReusableComponent } from './widgets/seat-map-reusable/seat-map-reusable.widget';
 import { DateSelector } from './widgets/date-selector/date-selector.widget';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -46,6 +47,7 @@ import { SeatMapWidgetComponent } from './widgets/seat-map/seat-map.widget';
     CoworkingReservationCard,
     CoworkingHoursCard,
     ConfirmReservationComponent,
+    SeatMapWidgetReusableComponent,
     NewReservationPageComponent,
     DateSelector,
     OperatingHoursDialog,

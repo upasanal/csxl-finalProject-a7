@@ -11,11 +11,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'seat-map',
-  templateUrl: './seat-map.widget.html',
-  styleUrls: ['./seat-map.widget.css']
+  selector: 'seat-map-reusable',
+  templateUrl: './seat-map-reusable.widget.html',
+  styleUrls: ['./seat-map-reusable.widget.css']
 })
-export class SeatMapWidgetComponent implements OnInit {
+export class SeatMapWidgetReusableComponent implements OnInit {
   seats: Seat[] = [];
   seatsClicked: Seat[] = [];
   seatsReserved: SeatAvailability[] = []; // seats only become reserved once user presses reserved button

@@ -1,3 +1,23 @@
+.mat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-table th.mat-header-cell {
+  text-align: center;
+  font-weight: bolder;
+}
+
+.action-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-cell button {
+  margin: 5px; 
+}
+
 .mat-mdc-card {
     max-width: 100%;
   }

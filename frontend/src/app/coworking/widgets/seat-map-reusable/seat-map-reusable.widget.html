@@ -19,18 +19,15 @@
     </ng-container>
             
     <ng-container *ngFor="let seat of seats">
-      <a (click)="seatClicked(seat)">
-        <circle
-          [attr.cx]="seat.x"
-          [attr.cy]="seat.y"
-          [attr.r]="4"
-          [style.fill]="isSeatReserved(seat) ? 'gray' : getSeatColor(seat)"
-          [class.opacity]="isSeatReserved(seat)"
-          [class.stroke]="!isSeatReserved(seat)" />
-        <text [attr.x]="seat.x" [attr.y]="seat.y" class="circle">
-          {{ seat.id }}
-        </text>
-      </a>
+      <circle
+        [attr.cx]="seat.x"
+        [attr.cy]="seat.y"
+        [attr.r]="4"
+        [style.fill]="getSeatColor(seat)"
+        [class.stroke]="true" />
+      <text [attr.x]="seat.x" [attr.y]="seat.y" class="circle">
+        {{ seat.id }}
+      </text>
     </ng-container>
           
   </svg>
@@ -56,11 +53,3 @@
     </div>
   </div>
 </mat-card>
-
-<button
-  mat-stroked-button
-  class="button"
-  [class.active]="isButtonActive()"
-  (click)="reserveSeats()">
-  Reserve Seats
-</button>

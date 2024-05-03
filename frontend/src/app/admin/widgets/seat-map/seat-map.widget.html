@@ -1,5 +1,5 @@
 <mat-card>
-        <svg [attr.viewBox]="boundaries">
+  <svg [attr.viewBox]="boundaries">
             
     <ng-container *ngFor="let rect of rectangleTables">
       <rect
@@ -7,7 +7,8 @@
         [attr.y]="rect.y"
         [attr.width]="rect.width"
         [attr.height]="rect.height"
-        fill="#BEBDBD"></rect>
+        fill="#BEBDBD">
+      </rect>
     </ng-container>
 
     <ng-container *ngFor="let circle of circleTables">
@@ -15,27 +16,33 @@
         [attr.cx]="circle.cx"
         [attr.cy]="circle.cy"
         [attr.r]="circle.radius"
-        fill="#BEBDBD"></circle>
+        fill="#BEBDBD">
+      </circle>
     </ng-container>
             
     <ng-container *ngFor="let seat of seats">
+                
       <a (click)="seatClicked(seat)">
+                    
         <circle
           [attr.cx]="seat.x"
           [attr.cy]="seat.y"
           [attr.r]="4"
-          [style.fill]="isSeatReserved(seat) ? 'gray' : getSeatColor(seat)"
-          [class.opacity]="isSeatReserved(seat)"
-          [class.stroke]="!isSeatReserved(seat)" />
+          [style.fill]="getSeatColor(seat)" 
+          [class.stroke]="true"/>
+          
+                    
         <text [attr.x]="seat.x" [attr.y]="seat.y" class="circle">
           {{ seat.id }}
         </text>
+                
       </a>
+            
     </ng-container>
           
   </svg>
 </mat-card>
-
+<!-- This HTML code was taken from new-reservation-page.component.html with an addition of Unavailable Seats -->
 <mat-card>
   <div class="legend-container">
     <div class="legend-item">
@@ -56,11 +63,3 @@
     </div>
   </div>
 </mat-card>
-
-<button
-  mat-stroked-button
-  class="button"
-  [class.active]="isButtonActive()"
-  (click)="reserveSeats()">
-  Reserve Seats
-</button>

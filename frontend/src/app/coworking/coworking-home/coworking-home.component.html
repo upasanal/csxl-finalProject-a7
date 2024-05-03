@@ -16,15 +16,32 @@
           [reservation]="activeReservation"></coworking-reservation-card>
       </ng-container>
 
-      <ng-container>
-        <ng-template #dropin>
-          <div class="dropin-card-container">
+      <ng-template #dropin>
+        <ng-container class="dropin-card-container">
+          <ng-container
+            *ngIf="
+              openOperatingHours$ | async as openOperatingHours;
+              else closeddropin
+            ">
             <coworking-dropin-availability-card
+              [operatingHours]="status.operating_hours"
               [seat_availability]="status.seat_availability"
-              (seatsSelected)="reserve($event)" />
-          </div>
-        </ng-template>
-      </ng-container>
+              (seatsSelected)="reserve($event)"
+              [openOperatingHours]="openOperatingHours">
+            </coworking-dropin-availability-card>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+
+      <ng-template #closeddropin>
+        <ng-container class="dropin-card-container">
+          <coworking-dropin-availability-card
+            [operatingHours]="status.operating_hours"
+            [seat_availability]="status.seat_availability"
+            (seatsSelected)="reserve($event)">
+          </coworking-dropin-availability-card>
+        </ng-container>
+      </ng-template>
 
       <ng-template #closed>
         <coworking-operating-hours-panel
@@ -33,6 +50,25 @@
     </ng-container>
   </div>
   <br />
+
+  <div class="coworking-reservations-grid">
+    <mat-card appearance="outlined">
+      <mat-card-content class="reservation-card">
+        <mat-action-list class="reservation-link">
+          <mat-list-item (click)="toggleSeatMap()">
+            <h3 matListItemTitle>{{ 'Show Seat Map' }}</h3>
+            <p matListItemLine>{{ 'View the seat map widget to find your spot!' }}</p>
+            <h3 matListItemMeta>&rsaquo;</h3>
+          </mat-list-item>
+        </mat-action-list>
+        <ng-container *ngIf="showSeatMap">
+          <seat-map-reusable></seat-map-reusable>
+        </ng-container>
+      </mat-card-content>
+    </mat-card>
+    <br />
+  </div>
+
   <div class="coworking-reservations-grid">
     <mat-card appearance="outlined">
       <mat-card-content class="reservation-card">
@@ -45,6 +81,7 @@
         </mat-action-list>
       </mat-card-content>
     </mat-card>
+    <br />
   </div>
 
   <div class="coworking-reservations-grid">

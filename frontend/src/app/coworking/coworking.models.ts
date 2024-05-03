@@ -33,6 +33,10 @@ export interface Seat {
   y: number;
 }
 
+export interface SeatDetails extends Seat {
+  room: Room;
+}
+
 export interface Floorplan {
   id: number;
   boundaries: string;
@@ -40,7 +44,7 @@ export interface Floorplan {
   rectangle_tables: RectangleTable[];
 }
 
-export interface CircleTable  {
+export interface CircleTable {
   cx: number;
   cy: number;
   id: number;

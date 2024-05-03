@@ -31,9 +31,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./coworking-home.component.css']
 })
 export class CoworkingPageComponent implements OnInit, OnDestroy {
+  public showSeatMap: boolean = false;
+
   public status$: Observable<CoworkingStatus>;
 
   public openOperatingHours$: Observable<OperatingHours | undefined>;
+
   public isOpen$: Observable<boolean>;
 
   public activeReservation$: Observable<Reservation | undefined>;
@@ -43,6 +46,8 @@ export class CoworkingPageComponent implements OnInit, OnDestroy {
   public upcomingRoomReservation$!: Observable<Reservation[]>;
 
   public filteredRoomReservations$!: Observable<Reservation[]>;
+
+  public reservations: Reservation[] = [];
 
   /** Route information to be used in App Routing Module */
   public static Route: Route = {
@@ -88,9 +93,13 @@ export class CoworkingPageComponent implements OnInit, OnDestroy {
       this.roomReservationService.pollUpcomingRoomReservation(this.snackBar);
     });
   }
-  // This method is responsible for handling the reservation process within the coworking home component. 
-  // It is invoked when a user confirmed their seat selection and initiates the reservation process. 
-  // This method communicates with the Coworking Service to draft a reservation based on the selected seats. 
+  // This meethod is responsible for handling the toggling of the seat map
+  toggleSeatMap() {
+    this.showSeatMap = !this.showSeatMap;
+  }
+  // This method is responsible for handling the reservation process within the coworking home component.
+  // It is invoked when a user confirmed their seat selection and initiates the reservation process.
+  // This method communicates with the Coworking Service to draft a reservation based on the selected seats.
   // Upon successful, reservation creation, it navigates the user to the reservation page.
   reserve(seatSelection: SeatAvailability[]) {
     this.coworkingService.draftReservation(seatSelection).subscribe({

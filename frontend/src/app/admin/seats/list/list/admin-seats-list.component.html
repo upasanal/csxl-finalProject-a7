@@ -1,0 +1,8 @@
+<div class="container">
+  <div class="seat-map-section">
+    <seat-map (reservationDrafted)="onSeatsSelected($event)"></seat-map>
+  </div>
+  <div class="seat-change-section">
+    <seat-change [selectedSeat]="selectedSeat"></seat-change>
+  </div>
+</div>

@@ -51,7 +51,6 @@ export class CoworkingReservationCard implements OnInit {
    */
   ngOnInit(): void {
     this.draftConfirmationDeadline$ = this.initDraftConfirmationDeadline();
-    console.log(this.reservation.seats)
   }
 
   checkinDeadline(reservationStart: Date, reservationEnd: Date): Date {

@@ -15,11 +15,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatCard, MatCardModule } from '@angular/material/card';
 
 import { AdminUsersListComponent } from './users/list/admin-users-list.component';
 import { AdminRolesListComponent } from './roles/list/admin-roles-list.component';
 import { AdminRoleDetailsComponent } from './roles/details/admin-role-details.component';
 import { AdminOrganizationListComponent } from './organization/list/admin-organization-list.component';
+import { AdminSeatsListComponent } from './seats/list/list/admin-seats-list.component';
+import { AdminSeatMapWidgetComponent } from './widgets/seat-map/seat-map.widget';
+import { AdminSeatChangeWidgetComponent } from './widgets/seat-change/seat-change.widget';
 
 @NgModule({
   declarations: [
@@ -27,8 +31,12 @@ import { AdminOrganizationListComponent } from './organization/list/admin-organi
     AdminUsersListComponent,
     AdminRolesListComponent,
     AdminRoleDetailsComponent,
-    AdminOrganizationListComponent
-  ],
+    AdminOrganizationListComponent,
+    AdminSeatsListComponent,
+    AdminSeatMapWidgetComponent, 
+    AdminSeatChangeWidgetComponent
+
+    ],
   imports: [
     CommonModule,
     AdminRoutingModule,
@@ -43,7 +51,8 @@ import { AdminOrganizationListComponent } from './organization/list/admin-organi
     MatListModule,
     MatAutocompleteModule,
     FormsModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    MatCardModule, 
+    ]
 })
 export class AdminModule {}

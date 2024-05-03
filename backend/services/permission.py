@@ -142,6 +142,7 @@ class PermissionService:
         user_perms = self._get_user_permissions(subject)
         if self._has_permission(user_perms, action, resource):
             return True
+    
 
         # Check role permissions
         role_permissions = self._get_user_roles_permissions(subject)
