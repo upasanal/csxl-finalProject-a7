@@ -11,9 +11,9 @@ import { AdminSeatMapWidgetComponent } from '../seat-map/seat-map.widget';
 import { SeatAdminService } from '../../seats/admin-seats-service';
 import { Router } from '@angular/router';
 import { windowWhen } from 'rxjs';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {FormsModule} from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'seat-change',

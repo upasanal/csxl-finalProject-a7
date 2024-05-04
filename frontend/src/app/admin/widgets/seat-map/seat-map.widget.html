@@ -7,8 +7,7 @@
         [attr.y]="rect.y"
         [attr.width]="rect.width"
         [attr.height]="rect.height"
-        fill="#BEBDBD">
-      </rect>
+        fill="#BEBDBD"></rect>
     </ng-container>
 
     <ng-container *ngFor="let circle of circleTables">
@@ -16,8 +15,7 @@
         [attr.cx]="circle.cx"
         [attr.cy]="circle.cy"
         [attr.r]="circle.radius"
-        fill="#BEBDBD">
-      </circle>
+        fill="#BEBDBD"></circle>
     </ng-container>
             
     <ng-container *ngFor="let seat of seats">
@@ -28,9 +26,9 @@
           [attr.cx]="seat.x"
           [attr.cy]="seat.y"
           [attr.r]="4"
-          [style.fill]="getSeatColor(seat)" 
-          [class.stroke]="true"/>
-          
+          [style.fill]="getSeatColor(seat)"
+          [class.stroke]="true" />
+
                     
         <text [attr.x]="seat.x" [attr.y]="seat.y" class="circle">
           {{ seat.id }}

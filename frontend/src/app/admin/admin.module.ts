@@ -20,7 +20,6 @@ import { MatCard, MatCardModule } from '@angular/material/card';
 import { AdminUsersListComponent } from './users/list/admin-users-list.component';
 import { AdminRolesListComponent } from './roles/list/admin-roles-list.component';
 import { AdminRoleDetailsComponent } from './roles/details/admin-role-details.component';
-import { AdminOrganizationListComponent } from './organization/list/admin-organization-list.component';
 import { AdminSeatsListComponent } from './seats/list/list/admin-seats-list.component';
 import { AdminSeatMapWidgetComponent } from './widgets/seat-map/seat-map.widget';
 import { AdminSeatChangeWidgetComponent } from './widgets/seat-change/seat-change.widget';
@@ -31,12 +30,10 @@ import { AdminSeatChangeWidgetComponent } from './widgets/seat-change/seat-chang
     AdminUsersListComponent,
     AdminRolesListComponent,
     AdminRoleDetailsComponent,
-    AdminOrganizationListComponent,
     AdminSeatsListComponent,
-    AdminSeatMapWidgetComponent, 
+    AdminSeatMapWidgetComponent,
     AdminSeatChangeWidgetComponent
-
-    ],
+  ],
   imports: [
     CommonModule,
     AdminRoutingModule,
@@ -52,7 +49,7 @@ import { AdminSeatChangeWidgetComponent } from './widgets/seat-change/seat-chang
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
-    MatCardModule, 
-    ]
+    MatCardModule
+  ]
 })
 export class AdminModule {}

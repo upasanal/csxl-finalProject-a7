@@ -24,7 +24,8 @@ from .user_role_table import user_role_table
 from .organization_entity import OrganizationEntity
 from .event_entity import EventEntity
 from .event_registration_entity import EventRegistrationEntity
-
+from .application_entity import ApplicationEntity
+from .section_application_table import section_application_table
 
 __authors__ = ["Kris Jordan"]
 __copyright__ = "Copyright 2023"

@@ -50,13 +50,8 @@
         }}</strong>
       </h3>
 
-      <p *ngIf="reservation.state === 'CONFIRMED'">
-        Check-in between {{ reservation.start | date: 'shortTime' }} and
-        {{
-          checkinDeadline(reservation.start, reservation.end)
-            | date: 'shortTime'
-        }}
-        to avoid cancellation.
+      <p *ngIf="reservation.state == 'CONFIRMED'">Check-in between {{ reservation.start|date:'shortTime' }} and {{
+        checkinDeadline(reservation.start,reservation.end)|date:'shortTime' }} to avoid cancellation.
       </p>
 
       <mat-divider></mat-divider>

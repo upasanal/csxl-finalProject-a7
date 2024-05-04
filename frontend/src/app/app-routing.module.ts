@@ -31,6 +31,12 @@ const routes: Routes = [
       import('./profile/profile.module').then((m) => m.ProfileModule)
   },
   {
+    path: 'profile',
+    title: 'Profile',
+    loadChildren: () =>
+      import('./profile/profile.module').then((m) => m.ProfileModule)
+  },
+  {
     path: 'academics',
     title: 'Academics',
     loadChildren: () =>
@@ -55,6 +61,14 @@ const routes: Routes = [
     title: 'Experimental',
     loadChildren: () =>
       import('./event/event.module').then((m) => m.EventModule)
+  },
+  {
+    path: 'ta-application',
+    title: 'TA Applications',
+    loadChildren: () =>
+      import('./ta-application/ta-application.module').then(
+        (m) => m.ApplicationsModule
+      )
   }
 ];
 

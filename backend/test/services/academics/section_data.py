@@ -60,9 +60,39 @@ comp_101_002 = Section(
     override_description="",
 )
 
-comp_301_001 = Section(
+comp_210_001 = Section(
     id=3,
+    course_id=course_data.comp_210.id,
+    number="001",
+    term_id=term_data.f_23.id,
+    meeting_pattern="TTh 8:00AM - 9:15AM",
+    override_title="",
+    override_description="",
+)
+
+comp_211_001 = Section(
+    id=4,
+    course_id=course_data.comp_211.id,
+    number="001",
+    term_id=term_data.f_23.id,
+    meeting_pattern="TTh 8:00AM - 9:15AM",
+    override_title="",
+    override_description="",
+)
+
+comp_301_001 = Section(
+    id=5,
     course_id=course_data.comp_301.id,
+    number="001",
+    term_id=term_data.f_23.id,
+    meeting_pattern="TTh 8:00AM - 9:15AM",
+    override_title="",
+    override_description="",
+)
+
+comp_311_001 = Section(
+    id=6,
+    course_id=course_data.comp_311.id,
     number="001",
     term_id=term_data.f_23.id,
     meeting_pattern="TTh 8:00AM - 9:15AM",
@@ -103,7 +133,7 @@ edited_comp_301_with_room = Section(
 )
 
 new_section = Section(
-    id=4,
+    id=7,
     course_id=course_data.comp_110.id,
     number="003",
     term_id=term_data.f_23.id,
@@ -113,7 +143,7 @@ new_section = Section(
 )
 
 new_section_with_lecture_room = Section(
-    id=4,
+    id=8,
     course_id=course_data.comp_110.id,
     number="003",
     term_id=term_data.f_23.id,
@@ -141,8 +171,52 @@ room_assignment_110_002 = (
     RoomAssignmentType.LECTURE_ROOM,
 )
 
-sections = [comp_101_001, comp_101_002, comp_301_001]
-assignments = [room_assignment_110_001, room_assignment_110_002]
+room_assignment_210_001 = (
+    comp_210_001.id,
+    virtual_room.id,
+    RoomAssignmentType.LECTURE_ROOM,
+)
+
+room_assignment_211_001 = (
+    comp_211_001.id,
+    virtual_room.id,
+    RoomAssignmentType.LECTURE_ROOM,
+)
+
+room_assignment_301_001 = (
+    comp_301_001.id,
+    virtual_room.id,
+    RoomAssignmentType.LECTURE_ROOM,
+)
+
+room_assignment_311_001 = (
+    comp_311_001.id,
+    virtual_room.id,
+    RoomAssignmentType.LECTURE_ROOM,
+)
+
+room_assignment_423_001 = (
+    new_section.id,
+    virtual_room.id,
+    RoomAssignmentType.LECTURE_ROOM,
+)
+
+sections = [
+    comp_101_001,
+    comp_101_002,
+    comp_210_001,
+    comp_211_001,
+    comp_301_001,
+    comp_311_001,
+]
+assignments = [
+    room_assignment_110_001,
+    room_assignment_110_002,
+    room_assignment_210_001,
+    room_assignment_211_001,
+    room_assignment_301_001,
+    room_assignment_311_001,
+]
 comp_110_sections = [comp_101_001, comp_101_002]
 
 
