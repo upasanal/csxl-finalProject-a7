@@ -21,7 +21,7 @@ from .fixtures import room_svc
 from .role_data import fake_data_fixture as fake_role_data_fixture
 from .user_data import fake_data_fixture as fake_user_data_fixture
 from .room_data import fake_data_fixture as fake_room_data_fixture
-
+from .user_data import root
 # Import the fake model data in a namespace for test assertions
 from . import room_data
 from . import user_data
@@ -65,14 +65,47 @@ def test_get_seats_by_id(room_svc: RoomService):
         else: 
             print(f"There were no seats for this id: {room_data.the_xl.id}")
 
-def test_put_seats_by_id(room_svc: RoomService): 
-    room = room_svc.get_by_id(room_data.the_xl.id)
-    room_svc.update
-
 def test_get_seats_by_id_invalid_room_id(room_svc: RoomService):
     invalid_room_id = "SN189"
     with pytest.raises(ResourceNotFoundException):
         room_svc.get_seats_by_id(invalid_room_id)
+
+def test_put_seats_by_id_invalid_room_and_seat_id(room_svc: RoomService):
+    permission_svc = create_autospec(PermissionService)
+    room_svc._permission_svc = permission_svc 
+    invalid_room_id = "SN189"
+    with pytest.raises(ResourceNotFoundException):
+        room_svc.update_seat_by_ids(invalid_room_id, 1, 50, 50, user_data.root)
+    
+    invalid_seat_id = 50
+    with pytest.raises(ResourceNotFoundException): 
+        room_svc.update_seat_by_ids(room_data.the_xl.id, invalid_seat_id, 50, 50, user_data.root)
+    
+def test_put_seats_by_id_invalid_authorization(room_svc: RoomService): 
+    valid_room_id = room_data.the_xl.id
+    valid_seat_id = 1
+    with pytest.raises(UserPermissionException):
+        room_svc.update_seat_by_ids(room_data.the_xl.id,valid_seat_id, 50, 50, user_data.ambassador)
+
+    with pytest.raises(UserPermissionException):
+        room_svc.update_seat_by_ids(room_data.the_xl.id,valid_seat_id, 50, 50, user_data.user)
+
+
+def test_put_seats_by_id_valid(room_svc: RoomService): 
+    permission_svc = create_autospec(PermissionService)
+    room_svc._permission_svc = permission_svc
+    
+    room_id = "SN156"
+    seat_id = 1
+    new_x = 50
+    new_y = 50
+    subject_user = root
+
+    updated_seat = room_svc.update_seat_by_ids(room_id, seat_id, new_x, new_y, subject_user)
+
+    assert updated_seat.x == new_x
+    assert updated_seat.y == new_y
+
 
 def test_get_boundaries_by_id(room_svc: RoomService):
     boundaries = room_svc.get_boundaries_by_room_id(room_data.the_xl.id)

@@ -61,6 +61,42 @@ class RoomService:
 
         # Convert entries to a model and return
         return [entity.to_details_model() for entity in entities]
+    
+    def update_seat_by_ids(self, room_id: str, seat_id: int, x: int, y: int, subject: User) -> Optional[SeatDetails]:
+        """
+        Updates a seat within a specific room.
+
+        Args:
+        subject: a valid User model representing the currently logged in User
+        room_id: the ID of the room to which the seat belongs
+        seat_id: the ID of the seat to update
+        seat: seartdetails to update the seat with
+
+        Returns:
+        SeatDetails: Object updated in the table
+        
+        Raises:
+        ResourceNotFoundException: If the room or seat does not exist
+        """
+        
+        self._permission_svc.enforce(subject, "manage_seats", "room/")
+        
+        room_entity = self._session.query(RoomEntity).filter_by(id=room_id).first()
+        if room_entity is None:
+            raise ResourceNotFoundException(f"Room with id: {room_id} does not exist.")
+        seat_entity = None
+        for seat in room_entity.seats:
+            if seat.id == seat_id: 
+                seat_entity = seat
+        if seat_entity is None:
+            raise ResourceNotFoundException(
+                f"Seat with id: {seat_id} in room {room_id} does not exist.")
+        seat_entity.x = x
+        seat_entity.y = y
+        # Commit changes
+        self._session.commit()
+        # Return edited object
+        return seat_entity.to_model()
 
     def get_by_id(self, id: str) -> RoomDetails:
         """Gets the room from the table for an id.
