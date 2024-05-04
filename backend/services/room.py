@@ -8,6 +8,7 @@ from fastapi import Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from backend.entities.coworking.seat_entity import SeatEntity
+from backend.entities.coworking.seat_entity import SeatEntity
 from backend.entities.floorplan.floorplan_entity import FloorplanEntity
 from backend.models.coworking.floorplan.circle_table import CircleTable
 
@@ -88,6 +89,7 @@ class RoomService:
             raise ResourceNotFoundException(f"Room with id: {id} does not exist.")
         seats = [seat_entity.to_model() for seat_entity in room_entity.seats]
         return seats
+
 
     def get_seat_by_ids(self, room_id: str, seat_id: int) -> Optional[SeatDetails]:
 
