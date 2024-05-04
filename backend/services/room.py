@@ -4,7 +4,7 @@ The Room Service allows the API to manipulate rooms data in the database.
 
 from typing import Optional
 from typing import Optional
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from backend.entities.coworking.seat_entity import SeatEntity
@@ -90,6 +90,7 @@ class RoomService:
         return seats
 
     def get_seat_by_ids(self, room_id: str, seat_id: int) -> Optional[SeatDetails]:
+
         room_entity = self._session.query(RoomEntity).filter_by(id=room_id).first()
         if room_entity is None:
             raise ResourceNotFoundException(f"Room with id: {room_id} does not exist.")
@@ -104,7 +105,7 @@ class RoomService:
 
 
     def update_seat_by_ids(
-        self, room_id: str, seat_id: int, x: int, y: int
+        self, room_id: str, seat_id: int, x: int, y: int, subject: User
     ) -> Optional[SeatDetails]:
         """
         Updates a seat within a specific room.
@@ -121,6 +122,8 @@ class RoomService:
         Raises:
             ResourceNotFoundException: If the room or seat does not exist
         """
+        self._permission_svc.enforce(subject, "manage_seats", "room/")
+
         room_entity = self._session.query(RoomEntity).filter_by(id=room_id).first()
         if room_entity is None:
             raise ResourceNotFoundException(f"Room with id: {room_id} does not exist.")

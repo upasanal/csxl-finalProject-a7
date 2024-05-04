@@ -189,13 +189,15 @@ def update_seat(
         seat: a valid seat model
         room_id: a valid room ID
         seat_id: a valid seat ID
+        x: x coordinate of the seat
+        y: y coordinate of the seat
         subject: a valid User model representing the currently logged in User
         room_service: a valid RoomService
 
     Returns:
         SeatDetails: Updated seat
     """
-    return room_service.update_seat_by_ids(room_id, seat_id, x, y)
+    return room_service.update_seat_by_ids(room_id, seat_id, x, y, subject)
 
 
 @api.get(
@@ -206,7 +208,6 @@ def update_seat(
 def get_seat(
     room_id: str,
     seat_id: int,
-    subject: User = Depends(registered_user),
     room_service: RoomService = Depends(),
 ) -> SeatDetails:
     """
